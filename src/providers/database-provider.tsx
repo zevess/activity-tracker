@@ -1,0 +1,24 @@
+import { db } from "@/db";
+import migrations from "@/drizzle/migrations";
+import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
+import { ActivityIndicator, Text, View } from "react-native";
+
+export function DatabaseProvider({ children }: { children: React.ReactNode }) {
+  const { success, error } = useMigrations(db, migrations);
+
+  if (error) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", padding: 20 }}>
+        <Text>Ошибка миграции</Text>
+      </View>
+    );
+  }
+  if (!success) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", padding: 20 }}>
+        <ActivityIndicator size={"large"} />
+      </View>
+    );
+  }
+  return <>{children}</>;
+}
