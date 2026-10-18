@@ -1,6 +1,4 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
-
-export type IconName = keyof typeof Ionicons.glyphMap;
+import { IconName } from "../ui/icon";
 export type TabName = "index" | "activities" | "stats" | "settings";
 
 export interface ITab {

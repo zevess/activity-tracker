@@ -1,4 +1,6 @@
+import { Card } from "@/components/ui/card";
 import { Screen } from "@/components/ui/screen";
+import { Link } from "expo-router";
 import { Text } from "react-native";
 
 export default function HomeScreen() {

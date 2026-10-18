@@ -13,21 +13,5 @@ export default function NotFoundPage() {
         </Link>
       </Card>
     </Screen>
-    // <>
-    //   <Stack.Screen options={{ title: "Не найдено" }} />
-    //   <View
-    //     style={{
-    //       flex: 1,
-    //       alignItems: "center",
-    //       justifyContent: "center",
-    //       gap: 3,
-    //     }}
-    //   >
-    //     <Text style={{ fontSize: 24 }}>Такого экрана нету</Text>
-    //     <Link href={"/"} style={{ textDecorationLine: "underline" }}>
-    //       На главную
-    //     </Link>
-    //   </View>
-    // </>
   );
 }
