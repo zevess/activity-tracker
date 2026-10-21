@@ -1,5 +1,4 @@
-import { listRepository } from "@/db/repositories/listRepository";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Button,
   FlatList,
@@ -15,11 +14,6 @@ export default function DbTestScreen() {
   const [items, setItems] = useState<Task[]>([]);
   const [name, setName] = useState("");
 
-  const refresh = () => listRepository.getAll().then(setItems);
-  useEffect(() => {
-    refresh();
-  }, []);
-
   return (
     <View style={{ flex: 1, padding: 5, gap: 3 }}>
       <TextInput
@@ -33,15 +27,7 @@ export default function DbTestScreen() {
         value={name}
         onChangeText={setName}
       />
-      <Button
-        title="Добавить"
-        onPress={async () => {
-          if (!name.trim()) return;
-          await listRepository.create({ name: name.trim() });
-          setName("");
-          refresh();
-        }}
-      />
+      <Button title="Добавить" />
       <FlatList
         data={items}
         keyExtractor={(i) => String(i.id)}

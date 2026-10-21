@@ -1,4 +1,4 @@
-import { db } from "@/db";
+import { db } from "@/data/db";
 import migrations from "@/drizzle/migrations";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import { ActivityIndicator, Text, View } from "react-native";

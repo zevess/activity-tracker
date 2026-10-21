@@ -1,68 +1,103 @@
 export const colors = {
   light: {
-    background: "#FFFFFF",
-    backgroundHigh: "#FFFFFF",
-    surface: "#FFFFFF",
-    surfaceStrong: "#F3F7F0",
-    border: "rgba(14, 15, 12, 0.12)",
-    text: "#0E0F0C",
-    textMuted: "#454745",
-    primary: "#163300",
-    primarySoft: "rgba(22, 51, 0, 0.08)",
-    primaryForeground: "#FFFFFF",
-    accent: "#9FE870",
-    accentForeground: "#163300",
-    secondary: "#163300",
-    secondarySoft: "rgba(22, 51, 0, 0.08)",
-    secondaryForeground: "#9FE870",
-    muted: "rgba(22, 51, 0, 0.08)",
-    mutedForeground: "#454745",
-    info: "#163300",
-    infoSoft: "#A0E1E1",
-    warning: "#3A341C",
-    warningSoft: "#FFEB69",
-    success: "#2F5711",
-    successSoft: "#DFF2D2",
-    danger: "#A8200D",
-    dangerSoft: "#F6DDD8",
-    mint: "#F3F7F0",
-    aqua: "#E9F7F7",
-    peach: "#FFF0E6",
-    lavender: "#F4EAF7",
-    lemon: "#FFF9D9",
-    ink: "#163300",
+    // Базовые
+    background: "#FAFCF8", // Очень светлый зелёный фон (не чисто белый — мягче)
+    backgroundHigh: "#FFFFFF", // Чистый белый для контраста
+    surface: "#FFFFFF", // Карточки
+    surfaceStrong: "#F3F7F0", // Выделенные области (чуть темнее)
+    border: "rgba(14, 15, 12, 0.12)", // Тонкая граница
+
+    // Текст
+    text: "#0E0F0C", // Основной текст (почти чёрный)
+    textMuted: "#5A5D58", // Вторичный текст (чуть светлее для контраста)
+
+    // Primary — глубокий зелёный (как тёмная листва)
+    primary: "#1B4D1B", // Тёмно-зелёный (кнопки, заголовки)
+    primarySoft: "rgba(27, 77, 27, 0.08)", // Фон для primary-элементов
+    primaryForeground: "#FFFFFF", // Текст на primary
+
+    // Accent — свежий зелёный (молодая листва, акценты)
+    accent: "#7DD85F", // Яркий зелёный (иконки, прогресс)
+    accentForeground: "#1B4D1B", // Текст на accent
+
+    // Secondary — тёплый коричневый (кора дерева)
+    secondary: "#6B4423", // Коричневый (альтернативные кнопки)
+    secondarySoft: "rgba(107, 68, 35, 0.08)",
+    secondaryForeground: "#FFFFFF",
+
+    // Muted
+    muted: "rgba(27, 77, 27, 0.06)",
+    mutedForeground: "#6B6E68",
+
+    // Информационные
+    info: "#2563EB", // Синий (информация)
+    infoSoft: "#DBEAFE",
+    warning: "#D97706", // Янтарный (предупреждение)
+    warningSoft: "#FEF3C7",
+    success: "#16A34A", // Зелёный (успех)
+    successSoft: "#DCFCE7",
+    danger: "#DC2626", // Красный (ошибка)
+    dangerSoft: "#FEE2E2",
+
+    // Пастельные (для категорий активностей / типов деревьев)
+    mint: "#D1FAE5", // Мятный (здоровье, рост)
+    aqua: "#CFFAFE", // Голубой (вода, спокойствие)
+    peach: "#FED7AA", // Персиковый (энергия, тепло)
+    lavender: "#E9D5FF", // Лавандовый (отдых, творчество)
+    lemon: "#FEF9C3", // Лимонный (радость, энергия)
+
+    // Ink — для специальных элементов (можно использовать для иконок)
+    ink: "#1B4D1B",
   },
+
   dark: {
-    background: "#121511",
-    backgroundHigh: "#163300",
-    surface: "#1B2118",
-    surfaceStrong: "#23301C",
-    border: "rgba(255, 255, 255, 0.14)",
-    text: "#FFFFFF",
-    textMuted: "#D7DDD1",
-    primary: "#9FE870",
-    primarySoft: "rgba(159, 232, 112, 0.16)",
-    primaryForeground: "#163300",
-    accent: "#9FE870",
-    accentForeground: "#163300",
-    secondary: "#FFFFFF",
-    secondarySoft: "rgba(255, 255, 255, 0.12)",
-    secondaryForeground: "#163300",
-    muted: "rgba(255, 255, 255, 0.10)",
-    mutedForeground: "#D7DDD1",
-    info: "#A0E1E1",
-    infoSoft: "#173334",
-    warning: "#FFEB69",
-    warningSoft: "#3A341C",
-    success: "#9FE870",
-    successSoft: "#253B18",
-    danger: "#FFC091",
-    dangerSoft: "#320707",
-    mint: "#253B18",
-    aqua: "#173334",
-    peach: "#3A2418",
-    lavender: "#260A2F",
-    lemon: "#3A341C",
-    ink: "#163300",
+    // Базовые
+    background: "#0F1410", // Очень тёмный зелёный (почти чёрный)
+    backgroundHigh: "#1A231A", // Чуть светлее для контраста
+    surface: "#1E2A1E", // Карточки
+    surfaceStrong: "#2A3A2A", // Выделенные области
+    border: "rgba(255, 255, 255, 0.12)",
+
+    // Текст
+    text: "#F5F7F3", // Светлый текст (не чисто белый — мягче)
+    textMuted: "#A8B0A3", // Вторичный текст
+
+    // Primary — яркий зелёный (в dark теме primary становится светлее)
+    primary: "#7DD85F", // Тот же accent из light
+    primarySoft: "rgba(125, 216, 95, 0.16)",
+    primaryForeground: "#0F1410", // Тёмный текст на светлом primary
+
+    // Accent — свежий зелёный
+    accent: "#7DD85F",
+    accentForeground: "#0F1410",
+
+    // Secondary — тёплый коричневый (светлее для dark темы)
+    secondary: "#A67C52", // Светло-коричневый
+    secondarySoft: "rgba(166, 124, 82, 0.16)",
+    secondaryForeground: "#0F1410",
+
+    // Muted
+    muted: "rgba(255, 255, 255, 0.08)",
+    mutedForeground: "#A8B0A3",
+
+    // Информационные (светлее для dark темы)
+    info: "#60A5FA", // Светло-синий
+    infoSoft: "#1E3A5F",
+    warning: "#FBBF24", // Светло-янтарный
+    warningSoft: "#4A3520",
+    success: "#4ADE80", // Светло-зелёный
+    successSoft: "#1A3A1A",
+    danger: "#F87171", // Светло-красный
+    dangerSoft: "#3A1A1A",
+
+    // Пастельные (тёмные версии для dark темы)
+    mint: "#1A3A2A", // Тёмно-мятный
+    aqua: "#1A2A3A", // Тёмно-голубой
+    peach: "#3A2A1A", // Тёмно-персиковый
+    lavender: "#2A1A3A", // Тёмно-лавандовый
+    lemon: "#3A3A1A", // Тёмно-лимонный
+
+    // Ink
+    ink: "#7DD85F",
   },
 } as const;
