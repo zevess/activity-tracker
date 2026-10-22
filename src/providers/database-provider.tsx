@@ -1,11 +1,14 @@
 import { db } from "@/data/db";
 import migrations from "@/drizzle/migrations";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
+import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
+import { useSQLiteContext } from "expo-sqlite";
 import { ActivityIndicator, Text, View } from "react-native";
 
 export function DatabaseProvider({ children }: { children: React.ReactNode }) {
   const { success, error } = useMigrations(db, migrations);
-
+  const expoDb = useSQLiteContext();
+  useDrizzleStudio(expoDb);
   if (error) {
     return (
       <View style={{ flex: 1, justifyContent: "center", padding: 20 }}>

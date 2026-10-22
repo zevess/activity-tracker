@@ -26,6 +26,8 @@ export function Input({
   const { colors, radius, spacing } = useAppTheme();
   const isQuiet = variant === "quiet";
   const inputHeight = size === "md" ? 44 : size === "lg" ? 60 : 52;
+  const inputFontSize = size === "md" ? 16 : size === "lg" ? 20 : 14;
+  const inputFontWeight = size === "md" ? "600" : size === "lg" ? "800" : "400";
   return (
     <View style={{ gap: spacing.sm }}>
       {label ? <AppText variant="caption">{label}</AppText> : null}
@@ -59,7 +61,9 @@ export function Input({
               flex: 1,
               minHeight: inputHeight - 2,
               color: colors.text,
-              fontSize: size === "sm" ? 14 : 15,
+              fontSize: inputFontSize,
+              fontWeight: inputFontWeight,
+              // fontSize: size === "sm" ? 14 : 15,
             },
             style,
           ]}

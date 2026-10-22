@@ -1,36 +1,61 @@
 import { useCreateActivity } from "@/data/queries/activities.queries";
-import { useState } from "react";
+import {
+  ActivityType,
+  activityTypeOptions,
+} from "@/data/types/activities.types";
+import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { RadioButtonGroup } from "../ui/radio-button-group";
 
 export function ActivityForm() {
-  const [name, setName] = useState("");
+  const [title, setTitle] = useState("");
+  const [selectedType, setSelectedType] = useState<ActivityType>("habit");
+
   const { createActivity } = useCreateActivity();
-  async function onPress() {
-    if (!name.trim()) return;
+
+  async function onSubmit() {
+    if (!title.trim()) return;
     createActivity(
       {
-        title: name,
+        title: title,
         type: "habit",
         scheduleType: "custom",
       },
       {
         onSuccess: () => {
-          setName("");
+          setTitle("");
         },
       },
     );
   }
   return (
-    <View style={{ gap: 16, justifyContent: "space-between", flex: 1 }}>
-      <Input
-        value={name}
-        onChangeText={setName}
-        label="Название"
-        variant="default"
-      />
-      <Button disabled={!name} onPress={onPress} label="Добавить" />
+    <View style={{ justifyContent: "space-between", flex: 1 }}>
+      <View style={{ gap: 16 }}>
+        <RadioButtonGroup
+          label="Тип"
+          selectedOption={selectedType}
+          setSelectedOption={setSelectedType}
+          options={activityTypeOptions}
+        />
+        <Input
+          size="lg"
+          value={title}
+          onChangeText={setTitle}
+          label="Название"
+          variant="default"
+        />
+        <Input
+          size="sm"
+          value={title}
+          onChangeText={setTitle}
+          label="Название"
+          variant="default"
+        />
+      </View>
+
+      <Button disabled={!title} onPress={onSubmit} label="Добавить" />
     </View>
   );
 }
