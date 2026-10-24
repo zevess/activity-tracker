@@ -1,4 +1,4 @@
-import { ActivityForm } from "@/components/activity-form/activity-form";
+import { ActivityForm } from "@/components/ui/activity-form";
 import { AppText } from "@/components/ui/app-text";
 import { IconButton } from "@/components/ui/icon-button";
 import { Screen } from "@/components/ui/screen";

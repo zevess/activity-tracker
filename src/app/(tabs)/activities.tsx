@@ -1,4 +1,4 @@
-import { ActivityCard } from "@/components/activity-card/activity-card";
+import { ActivitiesList } from "@/components/ui/activities-list";
 import { AppText } from "@/components/ui/app-text";
 import { Divider } from "@/components/ui/divider";
 import { IconButton } from "@/components/ui/icon-button";
@@ -9,12 +9,15 @@ import { Link } from "expo-router";
 import { View } from "react-native";
 
 export default function ActivitiesScreen() {
-  const { activities } = useGetActivities();
+  const {
+    activities,
+    isActivitiesLoading,
+    isActivitiesLoaded,
+    isActivitiesError,
+  } = useGetActivities();
+
   return (
     <Screen>
-      {/* <HeroPanel eyebrow="Активности" title="Здесь ваши активности" body="тексттщшуцоео шуцщшоещуц шощеу цошецу ощшеуцшщ ео щцуо цуешщое шщуцощеш уц"/> */}
-      {/* <Input placeholder="Добавить активность" leftIcon="add" /> */}
-
       <View
         style={{
           flexDirection: "row",
@@ -27,25 +30,16 @@ export default function ActivitiesScreen() {
         </Link>
       </View>
 
-      <SectionHeader title="Привычки" />
+      <SectionHeader title="Все активности" />
+      {isActivitiesLoaded && (
+        <ActivitiesList
+          isError={isActivitiesError}
+          isLoading={isActivitiesLoading}
+          activities={activities ?? []}
+        />
+      )}
 
-      <View style={{ gap: 12 }}>
-        {activities?.map((activity) => (
-          <ActivityCard
-            key={activity.id}
-            type={activity.type ?? "habit"}
-            title={activity.title}
-            dueTime={activity.dueTime}
-            completedAt={String(activity.completedAt)}
-            scheduleType={activity.scheduleType ?? "custom"}
-            targetDaye={[]}
-            reminderTime={null}
-          />
-        ))}
-      </View>
       <Divider />
-
-      <SectionHeader title="Активности" />
     </Screen>
   );
 }

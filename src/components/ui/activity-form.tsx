@@ -1,27 +1,38 @@
 import { useCreateActivity } from "@/data/queries/activities.queries";
+import { useGetCategories } from "@/data/queries/categories.queries";
 import {
   ActivityType,
   activityTypeOptions,
 } from "@/data/types/activities.types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { View } from "react-native";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { RadioButtonGroup } from "../ui/radio-button-group";
+import { Button } from "./button";
+import { CategoryPicker } from "./category-picker";
+import { Input } from "./input";
+import { RadioButtonGroup } from "./radio-button-group";
 
 export function ActivityForm() {
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [selectedType, setSelectedType] = useState<ActivityType>("habit");
+  const [selectedCategory, setSelectedCategory] = useState<number>();
 
   const { createActivity } = useCreateActivity();
+  const { categories } = useGetCategories();
 
   async function onSubmit() {
     if (!title.trim()) return;
     createActivity(
       {
-        title: title,
-        type: "habit",
+        title,
+        type: selectedType,
         scheduleType: "custom",
+        description,
+        categoryId: null,
+        targetDays: null,
+        reminderTime: null,
+        dueTime: null,
+        priority: null,
       },
       {
         onSuccess: () => {
@@ -48,11 +59,19 @@ export function ActivityForm() {
         />
         <Input
           size="sm"
-          value={title}
-          onChangeText={setTitle}
-          label="Название"
+          value={description}
+          onChangeText={setDescription}
+          label="Описание"
           variant="default"
         />
+        {selectedType === "habit" && (
+          <CategoryPicker
+            label="Категория"
+            options={categories ?? []}
+            selectedOption={selectedCategory}
+            onSelectOption={setSelectedCategory}
+          />
+        )}
       </View>
 
       <Button disabled={!title} onPress={onSubmit} label="Добавить" />

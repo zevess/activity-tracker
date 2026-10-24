@@ -54,63 +54,48 @@ export const priorityOptions = [
 ] satisfies SelectOption<Priority>[];
 
 export interface Activity {
+  id: number;
   type: ActivityType;
   title: string;
-  description?: string;
-  categoryId?: number;
+  description: string | null;
 
-  scheduleType: ScheduleType;
-  targetDaye: number[];
+  categoryId: number | null;
+  scheduleType: ScheduleType | null;
+  targetDays: string | null;
   reminderTime: string | null;
 
   dueTime: string | null;
-  priority?: Priority;
-  completedAt: string | null;
+  priority: Priority | null;
+  completedAt: Date | null;
 }
 
-// export interface ActivityBase {
-//   //   type: "habit" | "one_off";
-//   title: string;
-//   description?: string;
-//   categoryId?: number;
-//   //   scheduleType?: "daily" | "weekly" | "custom";
-//   //   targetDays?: string;
-//   //   reminderTime?: string;
-//   //   dueTime?: Date;
-//   //   priority?: "low" | "medium" | "high";
-// }
+export type CreateActivityInput = {
+  type: ActivityType;
+  title: string;
+  description: string | null;
 
-// export interface HabitActivity extends ActivityBase {
-//   type: "habit";
-//   scheduleType: ScheduleType;
-//   targetDaye: number[];
-//   reminderTime: string | null;
-// }
+  categoryId: number | null;
+  scheduleType: ScheduleType | null;
+  targetDays: string | null;
+  reminderTime: string | null;
 
-// export interface OneOffActivity extends ActivityBase {
-//   type: "one_off";
-//   dueTime: string | null;
-//   priority?: Priority;
-//   completedAt: string | null;
-// }
-
-// export type Activity = HabitActivity | OneOffActivity;
-
-export type CreateActivityInput =
-  | {
-      type: "habit";
-      title: string;
-      description?: string;
-      categoryId?: number;
-      scheduleType: ScheduleType;
-      targetDays?: number[];
-      reminderTime?: string;
-    }
-  | {
-      type: "one_off";
-      title: string;
-      description?: string;
-      categoryId?: number;
-      dueTime?: string;
-      priority: Priority;
-    };
+  dueTime: string | null;
+  priority: Priority | null;
+};
+// | {
+//     type: "habit";
+//     title: string;
+//     description?: string;
+//     categoryId?: number;
+//     scheduleType: ScheduleType;
+//     targetDays?: number[];
+//     reminderTime?: string;
+//   }
+// | {
+//     type: "one_off";
+//     title: string;
+//     description?: string;
+//     categoryId?: number;
+//     dueTime?: string;
+//     priority: Priority;
+//   };

@@ -20,7 +20,7 @@ export function RadioButtonGroup<T extends string>({
 }: RadioButtonGroupProps<T>) {
   const { colors, spacing, radius } = useAppTheme();
   return (
-    <View style={{ gap: spacing.sm }}>
+    <View>
       {label ? <AppText variant="caption">{label}</AppText> : null}
       <View
         style={{
@@ -36,20 +36,21 @@ export function RadioButtonGroup<T extends string>({
               onPress={() => setSelectedOption(option.value)}
               key={option.value}
               style={{
+                width: "47%",
                 alignItems: "center",
                 flexDirection: "row",
                 padding: spacing.md,
                 marginVertical: spacing.sm,
-                backgroundColor: colors.surfaceStrong,
+                backgroundColor: colors.surface,
                 borderRadius: radius.md,
                 borderWidth: 1,
-                borderColor: active ? colors.accent : "transparent",
+                borderColor: active ? colors.accent : colors.border,
                 gap: spacing.sm,
               }}
             >
               <Ionicons
                 size={spacing.xxl}
-                color={colors.accent}
+                color={active ? colors.accent : colors.border}
                 name={active ? "radio-button-on" : "radio-button-off"}
               />
               <AppText variant="subtitle">{option.label}</AppText>

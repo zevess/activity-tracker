@@ -1,4 +1,4 @@
-import { tabs } from "@/components/app-tabs";
+import { tabs } from "@/config/app-tabs.config";
 import { useAppTheme } from "@/theme/theme-provider";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Tabs } from "expo-router";

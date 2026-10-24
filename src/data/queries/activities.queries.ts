@@ -8,11 +8,16 @@ const activitiesKeys = {
 };
 
 export function useGetActivities() {
-  const { data: activities } = useQuery({
+  const {
+    data: activities,
+    isLoading: isActivitiesLoading,
+    isSuccess: isActivitiesLoaded,
+    isError: isActivitiesError
+  } = useQuery({
     queryKey: activitiesKeys.all,
     queryFn: () => activityRepository.getAll(),
   });
-  return { activities };
+  return { activities, isActivitiesLoading, isActivitiesLoaded, isActivitiesError };
 }
 
 export function useCreateActivity() {

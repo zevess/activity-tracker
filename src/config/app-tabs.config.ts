@@ -1,4 +1,13 @@
-import { ITab } from "./app-tabs.types";
+import { IconName } from "@/components/ui/icon";
+
+export type TabName = "index" | "activities" | "stats" | "settings";
+
+export interface ITab {
+  name: TabName;
+  title: string;
+  icon: IconName;
+}
+
 
 export const tabs: ITab[] = [
   {
