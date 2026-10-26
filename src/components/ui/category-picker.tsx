@@ -8,15 +8,15 @@ import { IconName } from "./icon";
 export type CategoryPickerProps = {
   label?: string;
   options: CategoryOption[];
-  selectedOption?: number;
-  onSelectOption: (id: number) => void;
+  value?: number;
+  onChange: (id: number) => void;
 };
 
 export function CategoryPicker({
   label,
   options,
-  selectedOption,
-  onSelectOption,
+  value,
+  onChange,
 }: CategoryPickerProps) {
   const { colors, spacing, radius } = useAppTheme();
   return (
@@ -30,14 +30,11 @@ export function CategoryPicker({
         }}
       >
         {options.map((option) => {
-          let active = selectedOption === option.id;
+          const isActive = value === option.id;
           return (
             <Pressable
               key={option.id}
-              onPress={() => {
-                console.log(option.id);
-                onSelectOption(option.id);
-              }}
+              onPress={() => onChange(option.id)}
               style={{
                 width: "47%",
               }}
@@ -47,7 +44,7 @@ export function CategoryPicker({
                 name={option.name}
                 color={option.color}
                 pressable
-                isPressed={active}
+                isPressed={isActive}
                 size="lg"
               />
             </Pressable>

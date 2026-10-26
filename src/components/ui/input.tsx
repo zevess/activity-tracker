@@ -11,12 +11,14 @@ type InputProps = TextInputProps & {
   leftIcon?: IconName;
   rightIcon?: IconName;
   error?: string;
+  multiline?: boolean;
 };
 
 export function Input({
   label,
   variant = "default",
   size = "md",
+  multiline = false,
   leftIcon,
   rightIcon,
   error,
@@ -56,6 +58,7 @@ export function Input({
         ) : null}
         <TextInput
           placeholderTextColor={colors.textMuted}
+          multiline={multiline}
           style={[
             {
               flex: 1,

@@ -48,6 +48,7 @@ export const colors = {
 
     // Ink — для специальных элементов (можно использовать для иконок)
     ink: "#1B4D1B",
+    transparent: "transparent",
   },
 
   dark: {
@@ -99,5 +100,6 @@ export const colors = {
 
     // Ink
     ink: "#7DD85F",
+    transparent: "transparent",
   },
 } as const;
