@@ -4,7 +4,7 @@ export type DayOption = {
   label: string;
 };
 
-export const days: DayOption[] = [
+export const daysOptions: DayOption[] = [
   {
     value: 1,
     name: "Понедельник",

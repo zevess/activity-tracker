@@ -1,0 +1,1 @@
+ALTER TABLE `activities` RENAME COLUMN "due_time" TO "due_date";

@@ -8,7 +8,7 @@ import { IconName } from "./icon";
 export type CategoryPickerProps = {
   label?: string;
   options: CategoryOption[];
-  value?: number;
+  value?: number | null;
   onChange: (id: number) => void;
 };
 
@@ -27,6 +27,7 @@ export function CategoryPicker({
           flexDirection: "row",
           flexWrap: "wrap",
           gap: spacing.md,
+          width: "100%",
         }}
       >
         {options.map((option) => {
@@ -36,7 +37,8 @@ export function CategoryPicker({
               key={option.id}
               onPress={() => onChange(option.id)}
               style={{
-                width: "47%",
+                width: "48%",
+                flexGrow: 1,
               }}
             >
               <CategoryChip

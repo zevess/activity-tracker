@@ -1,10 +1,10 @@
 import { Activity } from "@/data/types/activities.types";
-import { DEFAULT_CATEGORIES } from "@/data/types/categories.types";
 import { useAppTheme } from "@/theme/theme-provider";
 import { View } from "react-native";
 import { AppText } from "./app-text";
 import { Card } from "./card";
 import { CategoryChip } from "./category-chip";
+import { IconName } from "./icon";
 
 type ActivityCardProps = {
   activity: Activity;
@@ -24,9 +24,9 @@ export function ActivityCard({ activity }: ActivityCardProps) {
         }}
       >
         <CategoryChip
-          name={DEFAULT_CATEGORIES[0].name}
-          icon={DEFAULT_CATEGORIES[0].icon}
-          color={DEFAULT_CATEGORIES[0].color}
+          name={activity.category?.name as string}
+          icon={activity.category?.icon as IconName}
+          color={activity.category?.color as string}
         />
       </View>
     </Card>

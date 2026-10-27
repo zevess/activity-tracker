@@ -8,6 +8,7 @@ export type DayPickerProps = {
   options: DayOption[];
   values: number[];
   onChange: (days: number[]) => void;
+  error?: string;
 };
 
 export function DayPicker({
@@ -15,6 +16,7 @@ export function DayPicker({
   options,
   values,
   onChange,
+  error,
 }: DayPickerProps) {
   const { colors, spacing, radius } = useAppTheme();
   function toggleDay(day: number) {
@@ -26,7 +28,14 @@ export function DayPicker({
   }
   return (
     <View style={{ gap: spacing.sm }}>
-      {label && <AppText variant="caption">{label}</AppText>}
+      <View>
+        {label && <AppText variant="caption">{label}</AppText>}
+        {error ? (
+          <AppText variant="caption" tone="danger">
+            {error}
+          </AppText>
+        ) : null}
+      </View>
       <View
         style={{
           width: "100%",

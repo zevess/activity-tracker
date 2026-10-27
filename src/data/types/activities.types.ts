@@ -1,7 +1,9 @@
+import { CategoryOption } from "./categories.types";
+
 export const ACTIVITY_TYPES = ["habit", "one_off"] as const;
 export type ActivityType = (typeof ACTIVITY_TYPES)[number];
 
-export const SCHEDULE_TYPES = ["daily", "weekly", "custom"] as const;
+export const SCHEDULE_TYPES = ["daily", "custom"] as const;
 export type ScheduleType = (typeof SCHEDULE_TYPES)[number];
 
 export const PRIORITY = ["low", "medium", "high"] as const;
@@ -27,10 +29,6 @@ export const scheduleTypeOptions = [
   {
     value: "daily",
     label: "Ежедневно",
-  },
-  {
-    value: "weekly",
-    label: "Еженедельно",
   },
   {
     value: "custom",
@@ -61,41 +59,26 @@ export interface Activity {
 
   categoryId: number | null;
   scheduleType: ScheduleType | null;
-  targetDays: string | null;
+  targetDays: number[] | null;
   reminderTime: string | null;
 
-  dueTime: string | null;
+  dueDate: string | null;
   priority: Priority | null;
   completedAt: Date | null;
+
+  category: CategoryOption | null;
 }
 
 export type CreateActivityInput = {
   type: ActivityType;
   title: string;
-  description: string | null;
+  description?: string | null;
+  categoryId?: number | null;
 
-  categoryId: number | null;
-  scheduleType: ScheduleType | null;
-  targetDays: string | null;
-  reminderTime: string | null;
+  scheduleType?: ScheduleType | null;
+  targetDays?: number[] | null;
+  reminderTime?: string | null;
 
-  dueTime: string | null;
-  priority: Priority | null;
+  dueDate?: string | null;
+  priority?: Priority | null;
 };
-// | {
-//     type: "habit";
-//     title: string;
-//     description?: string;
-//     categoryId?: number;
-//     scheduleType: ScheduleType;
-//     targetDays?: number[];
-//     reminderTime?: string;
-//   }
-// | {
-//     type: "one_off";
-//     title: string;
-//     description?: string;
-//     categoryId?: number;
-//     dueTime?: string;
-//     priority: Priority;
-//   };

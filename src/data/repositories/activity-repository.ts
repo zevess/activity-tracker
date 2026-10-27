@@ -5,7 +5,21 @@ import { CreateActivityInput } from "../types/activities.types";
 
 export const activityRepository = {
   async getAll() {
-    return db.select().from(activities).orderBy(desc(activities.createdAt));
+    // const rows = await db.select().from(activities);
+    // return rows;
+    const rows = await db.query.activities.findMany({
+      where: eq(activities.isArchived, false),
+      orderBy: [desc(activities.createdAt)],
+      with: {
+        category: true,
+      },
+    });
+    return rows.map((row) => ({
+      ...row,
+      targetDays: row.targetDays
+        ? (JSON.parse(row.targetDays) as number[])
+        : null,
+    }));
   },
   async getById(id: number) {
     const result = await db
@@ -24,16 +38,15 @@ export const activityRepository = {
         type: data.type,
         categoryId: data.categoryId ?? null,
 
-        scheduleType: data.type === "habit" ? data.scheduleType : null,
+        scheduleType: data.scheduleType ?? null,
         targetDays:
-          data.type === "habit" && data.targetDays
+          data.targetDays && data.targetDays.length > 0
             ? JSON.stringify(data.targetDays)
             : null,
-        reminderTime:
-          data.type === "habit" ? (data.reminderTime ?? null) : null,
+        reminderTime: data.reminderTime ?? null,
 
-        dueTime: data.type === "one_off" ? (data.dueTime ?? null) : null,
-        priority: data.type === "one_off" ? (data.priority ?? "medium") : null,
+        dueDate: data.dueDate ?? null,
+        priority: data.priority ?? null,
       })
       .returning();
     return result[0];

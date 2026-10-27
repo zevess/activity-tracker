@@ -1,0 +1,1 @@
+ALTER TABLE `activities` RENAME COLUMN "targer_days" TO "target_days";

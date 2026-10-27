@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import {
   ACTIVITY_TYPES,
@@ -23,10 +23,10 @@ export const activities = sqliteTable("activities", {
     .default(false),
 
   scheduleType: text("schedule_type", { enum: SCHEDULE_TYPES }),
-  targetDays: text("targer_days"),
+  targetDays: text("target_days"),
   reminderTime: text("reminder_time"),
 
-  dueTime: text("due_time"),
+  dueDate: text("due_date"),
   priority: text("priority", { enum: PRIORITY }),
   completedAt: integer("completed_at", { mode: "timestamp" }),
 });
@@ -43,6 +43,17 @@ export const categories = sqliteTable("categories", {
     .notNull()
     .default(sql`(unixepoch())`),
 });
+
+export const categoriesRelations = relations(categories, ({ many }) => ({
+  activities: many(activities),
+}));
+
+export const activitiesRelations = relations(activities, ({ one }) => ({
+  category: one(categories, {
+    fields: [activities.categoryId],
+    references: [categories.id],
+  }),
+}));
 
 export type Activity = typeof activities.$inferSelect;
 export type Category = typeof categories.$inferSelect;

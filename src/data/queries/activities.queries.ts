@@ -12,12 +12,17 @@ export function useGetActivities() {
     data: activities,
     isLoading: isActivitiesLoading,
     isSuccess: isActivitiesLoaded,
-    isError: isActivitiesError
+    isError: isActivitiesError,
   } = useQuery({
     queryKey: activitiesKeys.all,
     queryFn: () => activityRepository.getAll(),
   });
-  return { activities, isActivitiesLoading, isActivitiesLoaded, isActivitiesError };
+  return {
+    activities,
+    isActivitiesLoading,
+    isActivitiesLoaded,
+    isActivitiesError,
+  };
 }
 
 export function useCreateActivity() {
@@ -28,6 +33,9 @@ export function useCreateActivity() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: activitiesKeys.all });
       router.push("/activities");
+    },
+    onError: (error) => {
+      console.error(error);
     },
   });
   return { createActivity };

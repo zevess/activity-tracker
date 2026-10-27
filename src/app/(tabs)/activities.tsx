@@ -16,6 +16,7 @@ export default function ActivitiesScreen() {
     isActivitiesError,
   } = useGetActivities();
 
+  console.log(activities);
   return (
     <Screen>
       <View

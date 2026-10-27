@@ -29,6 +29,20 @@
       "when": 1793026960206,
       "tag": "0003_polite_loa",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1793113829062,
+      "tag": "0004_neat_daredevil",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1793124035388,
+      "tag": "0005_low_radioactive_man",
+      "breakpoints": true
     }
   ]
 }
