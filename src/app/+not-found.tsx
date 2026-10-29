@@ -1,13 +1,15 @@
+import { AppText } from "@/components/ui/app-text";
 import { Card } from "@/components/ui/card";
 import { Screen } from "@/components/ui/screen";
 import { Link } from "expo-router";
-import { Text } from "react-native";
 
 export default function NotFoundPage() {
   return (
     <Screen contentStyle={{ justifyContent: "center" }}>
       <Card>
-        <Text style={{ fontSize: 24 }}>Такого экрана нету</Text>
+        <AppText variant="subtitle" tone="muted">
+          Такого экрана нету
+        </AppText>
         <Link href={"/"} style={{ textDecorationLine: "underline" }}>
           На главную
         </Link>

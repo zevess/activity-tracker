@@ -3,14 +3,11 @@ import { IconName } from "@/components/ui/icon";
 export type Category = {
   name: string;
   color: string;
-  icon: IconName;
+  icon: IconName | string;
 };
 
-export type CategoryOption = {
+export type CategoryOption = Category & {
   id: number;
-  name: string;
-  color: string;
-  icon: IconName | string;
 };
 
 export const DEFAULT_CATEGORIES: Category[] = [

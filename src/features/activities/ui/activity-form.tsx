@@ -1,4 +1,7 @@
-import { useCreateActivity } from "@/data/queries/activities.queries";
+import {
+  useCreateActivity,
+  useUpdateActivity,
+} from "@/data/queries/activities.queries";
 import { useGetCategories } from "@/data/queries/categories.queries";
 import {
   createActivitySchema,
@@ -6,72 +9,74 @@ import {
 } from "@/data/schema/activity.schema";
 import {
   activityTypeOptions,
-  CreateActivityInput,
   priorityOptions,
   scheduleTypeOptions,
 } from "@/data/types/activities.types";
 import { daysOptions } from "@/data/types/days.types";
-import { useTomorrowDate } from "@/hooks/use-tomorrow-date";
+import { getDefaultCategory } from "@/features/categories/lib/get-default-category";
+import { defaultInitialData } from "@/hooks/use-initial-data";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { View } from "react-native";
-import { Button } from "./button";
-import { CategoryPicker } from "./category-picker";
-import { DatePickerWrapper } from "./date-picker";
-import { DayPicker } from "./day-picker";
-import { Input } from "./input";
-import { RadioButtonGroup } from "./radio-button-group";
-import { TimePicker } from "./time-picker";
+import { Button } from "../../../components/ui/button";
+import { DatePickerWrapper } from "../../../components/ui/date-picker";
+import { DayPicker } from "../../../components/ui/day-picker";
+import { Input } from "../../../components/ui/input";
+import { RadioButtonGroup } from "../../../components/ui/radio-button-group";
+import { TimePicker } from "../../../components/ui/time-picker";
+import { CategoryPicker } from "../../categories/ui/category-picker";
+import { getActivityPayload } from "../lib/activity-payload";
 
-export function ActivityForm() {
+type ActivityFormProps = {
+  mode: "create" | "edit";
+  activityId?: number;
+  initialData?: CreateActivitySchema;
+};
+
+export function ActivityForm({
+  mode,
+  activityId,
+  initialData,
+}: ActivityFormProps) {
   const { createActivity } = useCreateActivity();
+  const { updateActivity } = useUpdateActivity(Number(activityId));
   const { categories } = useGetCategories();
-  const { tomorrowDate } = useTomorrowDate();
+  const defaultCategory = getDefaultCategory(categories);
 
   const {
     control,
     handleSubmit,
     watch,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<CreateActivitySchema>({
     resolver: zodResolver(createActivitySchema),
-    defaultValues: {
-      type: "habit",
-      title: "",
-      description: "",
-      scheduleType: "daily",
-      priority: "medium",
-      targetDays: [1, 2, 3, 4, 5, 6, 7],
-      reminderTime: "09:00",
-      dueDate: tomorrowDate,
-    },
+    mode: "onTouched",
+    defaultValues: initialData ?? defaultInitialData,
   });
   const activityType = watch("type");
   const scheduleType = watch("scheduleType");
 
+  useEffect(() => {
+    if (initialData && activityId) {
+      reset(initialData);
+    }
+  }, [activityId, initialData, reset]);
+
   function onSubmit(data: CreateActivitySchema) {
-    const payload: CreateActivityInput = {
-      title: data.title,
-      description: data.description,
-      categoryId: data.categoryId ?? null,
-      type: data.type,
-      reminderTime: data.reminderTime,
-      ...(data.type === "habit" && {
-        scheduleType: data.scheduleType,
-        targetDays:
-          data.scheduleType === "custom"
-            ? data.targetDays
-            : [1, 2, 3, 4, 5, 6, 7],
-      }),
-      ...(data.type === "one_off" && {
-        dueDate: data.dueDate,
-        priority: data.priority,
-      }),
-    };
-    createActivity(payload);
-    // console.log(payload);
+    const payload = getActivityPayload(data, defaultCategory);
+    if (mode === "create") {
+      createActivity(payload);
+    }
+    if (mode === "edit") {
+      updateActivity(payload);
+    }
   }
 
+  function onError(errors: any) {
+    console.error(errors);
+  }
   return (
     <View style={{ justifyContent: "space-between", flex: 1, gap: 16 }}>
       <View style={{ gap: 16 }}>
@@ -143,7 +148,7 @@ export function ActivityForm() {
           />
         )}
 
-        {scheduleType === "custom" && (
+        {activityType === "habit" && scheduleType === "custom" && (
           <Controller
             control={control}
             name="targetDays"
@@ -197,8 +202,9 @@ export function ActivityForm() {
 
       <Button
         disabled={isSubmitting}
-        onPress={handleSubmit(onSubmit)}
-        label="Добавить"
+        loading={isSubmitting}
+        onPress={handleSubmit(onSubmit, onError)}
+        label={mode === "create" ? "Добавить" : "Сохранить"}
       />
     </View>
   );

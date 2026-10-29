@@ -1,7 +1,9 @@
+import { Divider } from "@/components/ui/divider";
+import { SectionHeader } from "@/components/ui/section-header";
 import { Activity } from "@/data/types/activities.types";
 import { ActivityIndicator, View } from "react-native";
+import { AppText } from "../../../components/ui/app-text";
 import { ActivityCard } from "./activity-card";
-import { AppText } from "./app-text";
 
 type ActivitiesListProps = {
   activities: Activity[];
@@ -14,6 +16,8 @@ export function ActivitiesList({
   isLoading,
   isError,
 }: ActivitiesListProps) {
+  const oneOffs = activities.filter((activity) => activity.type === "one_off");
+  const habits = activities.filter((acitivity) => acitivity.type === "habit");
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -41,10 +45,21 @@ export function ActivitiesList({
     );
   }
   return (
-    <View style={{ gap: 12 }}>
-      {activities.map((activity) => (
-        <ActivityCard key={activity.id} activity={activity} />
-      ))}
+    <View style={{ gap: 16 }}>
+      <View style={{ gap: 12 }}>
+        <SectionHeader title="Привычки" />
+        {habits.map((habit) => (
+          <ActivityCard key={habit.id} activity={habit} />
+        ))}
+      </View>
+      <Divider />
+
+      <View style={{ gap: 12 }}>
+        <SectionHeader title="Активности" />
+        {oneOffs.map((oneOff) => (
+          <ActivityCard key={oneOff.id} activity={oneOff} />
+        ))}
+      </View>
     </View>
   );
 }

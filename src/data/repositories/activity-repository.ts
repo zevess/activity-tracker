@@ -5,8 +5,6 @@ import { CreateActivityInput } from "../types/activities.types";
 
 export const activityRepository = {
   async getAll() {
-    // const rows = await db.select().from(activities);
-    // return rows;
     const rows = await db.query.activities.findMany({
       where: eq(activities.isArchived, false),
       orderBy: [desc(activities.createdAt)],
@@ -51,14 +49,32 @@ export const activityRepository = {
       .returning();
     return result[0];
   },
-  // async update(id: number, data: Partial<Activity>) {
-  //   const result = await db
-  //     .update(activities)
-  //     .set(data)
-  //     .where(eq(activities.id, id))
-  //     .returning();
-  //   return result[0];
-  // },
+
+  async update(id: number, data: CreateActivityInput) {
+    const result = await db
+      .update(activities)
+      .set({
+        title: data.title,
+        description: data.description ?? null,
+        type: data.type,
+        categoryId: data.categoryId ?? null,
+
+        scheduleType: data.scheduleType ?? null,
+        targetDays:
+          data.targetDays && data.targetDays.length > 0
+            ? JSON.stringify(data.targetDays)
+            : null,
+        reminderTime: data.reminderTime ?? null,
+
+        dueDate: data.dueDate ?? null,
+        priority: data.priority ?? null,
+        updatedAt: new Date(),
+      })
+      .where(eq(activities.id, id))
+      .returning();
+    return result[0];
+  },
+
   async delete(id: number) {
     await db.delete(activities).where(eq(activities.id, id));
   },

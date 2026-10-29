@@ -1,3 +1,4 @@
+import { CreateActivitySchema } from "../schema/activity.schema";
 import { CategoryOption } from "./categories.types";
 
 export const ACTIVITY_TYPES = ["habit", "one_off"] as const;
@@ -59,14 +60,14 @@ export interface Activity {
 
   categoryId: number | null;
   scheduleType: ScheduleType | null;
-  targetDays: number[] | null;
+  targetDays: number[] | string | null;
   reminderTime: string | null;
 
   dueDate: string | null;
   priority: Priority | null;
   completedAt: Date | null;
 
-  category: CategoryOption | null;
+  category?: CategoryOption | null;
 }
 
 export type CreateActivityInput = {
@@ -82,3 +83,6 @@ export type CreateActivityInput = {
   dueDate?: string | null;
   priority?: Priority | null;
 };
+
+
+

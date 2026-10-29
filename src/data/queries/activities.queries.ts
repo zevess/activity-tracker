@@ -14,7 +14,7 @@ export function useGetActivities() {
     isSuccess: isActivitiesLoaded,
     isError: isActivitiesError,
   } = useQuery({
-    queryKey: activitiesKeys.all,
+    queryKey: ["get activities"],
     queryFn: () => activityRepository.getAll(),
   });
   return {
@@ -25,13 +25,33 @@ export function useGetActivities() {
   };
 }
 
+export function useGetActivityById(id: number) {
+  const {
+    data: activity,
+    isLoading: isActivityLoading,
+    isSuccess: isActivityLoaded,
+    isError: isActivityError,
+  } = useQuery({
+    queryKey: ["get activity by id", id],
+    queryFn: () => activityRepository.getById(id),
+    refetchOnMount: true,
+  });
+  return {
+    activity,
+    isActivityLoading,
+    isActivityLoaded,
+    isActivityError,
+  };
+}
+
 export function useCreateActivity() {
   const queryClient = useQueryClient();
   const router = useRouter();
   const { mutate: createActivity } = useMutation({
+    mutationKey: ["create activity"],
     mutationFn: (data: CreateActivityInput) => activityRepository.create(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: activitiesKeys.all });
+      queryClient.invalidateQueries({ queryKey: ["get activities"] });
       router.push("/activities");
     },
     onError: (error) => {
@@ -39,4 +59,24 @@ export function useCreateActivity() {
     },
   });
   return { createActivity };
+}
+
+export function useUpdateActivity(id: number) {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const { mutate: updateActivity, isError: isActivityUpdatingError } =
+    useMutation({
+      mutationKey: ["update activity"],
+      mutationFn: (data: CreateActivityInput) =>
+        activityRepository.update(id, data),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["get activities"] });
+        queryClient.invalidateQueries({ queryKey: ["get activity by id", id] });
+        router.push("/activities");
+      },
+      onError: (error) => {
+        console.error(error);
+      },
+    });
+  return { updateActivity, isActivityUpdatingError };
 }

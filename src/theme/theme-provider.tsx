@@ -1,4 +1,4 @@
-import { appStorage } from "@/storage/app-storage";
+import { appStorage } from "@/lib/storage/app-storage";
 import { DarkTheme, DefaultTheme, ThemeProvider } from "expo-router";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useColorScheme } from "react-native";

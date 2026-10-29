@@ -1,10 +1,8 @@
-import { ActivitiesList } from "@/components/ui/activities-list";
 import { AppText } from "@/components/ui/app-text";
-import { Divider } from "@/components/ui/divider";
 import { IconButton } from "@/components/ui/icon-button";
 import { Screen } from "@/components/ui/screen";
-import { SectionHeader } from "@/components/ui/section-header";
 import { useGetActivities } from "@/data/queries/activities.queries";
+import { ActivitiesList } from "@/features/activities/ui/activities-list";
 import { Link } from "expo-router";
 import { View } from "react-native";
 
@@ -16,7 +14,6 @@ export default function ActivitiesScreen() {
     isActivitiesError,
   } = useGetActivities();
 
-  console.log(activities);
   return (
     <Screen>
       <View
@@ -31,7 +28,6 @@ export default function ActivitiesScreen() {
         </Link>
       </View>
 
-      <SectionHeader title="Все активности" />
       {isActivitiesLoaded && (
         <ActivitiesList
           isError={isActivitiesError}
@@ -39,8 +35,6 @@ export default function ActivitiesScreen() {
           activities={activities ?? []}
         />
       )}
-
-      <Divider />
     </Screen>
   );
 }

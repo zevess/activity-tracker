@@ -1,9 +1,9 @@
 import { CategoryOption } from "@/data/types/categories.types";
 import { useAppTheme } from "@/theme/theme-provider";
 import { Pressable, View } from "react-native";
-import { AppText } from "./app-text";
+import { AppText } from "../../../components/ui/app-text";
+import { IconName } from "../../../components/ui/icon";
 import { CategoryChip } from "./category-chip";
-import { IconName } from "./icon";
 
 export type CategoryPickerProps = {
   label?: string;
