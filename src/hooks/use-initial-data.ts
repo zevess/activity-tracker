@@ -1,6 +1,6 @@
 import { CreateActivitySchema } from "@/data/schema/activity.schema";
 import { Activity } from "@/data/types/activities.types";
-import { getTomorrowDate } from "@/lib/date";
+import { getTomorrowDate } from "@/lib/date/date";
 import { useMemo } from "react";
 
 export const defaultInitialData: CreateActivitySchema = {
@@ -14,7 +14,7 @@ export const defaultInitialData: CreateActivitySchema = {
   dueDate: getTomorrowDate(),
 };
 
-export function useInitialData(activity?: Activity) {
+export function useInitialData(activity?: Activity | null) {
   const initialData = useMemo<CreateActivitySchema>(
     () => ({
       type: activity?.type ? activity?.type : "habit",
@@ -22,9 +22,7 @@ export function useInitialData(activity?: Activity) {
       description: activity?.description ?? "",
       categoryId: activity?.categoryId,
       scheduleType: activity?.scheduleType ?? "daily",
-      targetDays: activity?.targetDays
-        ? JSON.parse(String(activity.targetDays))
-        : [1, 2, 3, 4, 5, 6, 7],
+      targetDays: activity?.targetDays ?? [1, 2, 3, 4, 5, 6, 7],
       reminderTime: activity?.reminderTime ?? "09:00",
       dueDate: activity?.dueDate ?? getTomorrowDate(),
       priority: activity?.priority ?? "medium",

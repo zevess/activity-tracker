@@ -21,3 +21,13 @@ export function getConvertedDays(arr: number[] | null) {
   const filteredDays = daysOptions.filter((day) => arr.includes(day.value));
   return filteredDays;
 }
+
+export function getTimeDifference(reminderTime?: string | null) {
+  const time = reminderTime + ":00";
+  const todayStr = new Date().toISOString().split("T")[0];
+  const date = new Date(`${todayStr}T${time}`);
+  const currentTIme = new Date();
+  const timeDifference = currentTIme.getTime() - date.getTime();
+  const diffInHours = Math.floor(timeDifference / (1000 * 60 * 60));
+  return diffInHours;
+}

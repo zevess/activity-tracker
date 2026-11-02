@@ -1,11 +1,8 @@
+import { appToast } from "@/lib/toast/app-toast";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { activityRepository } from "../repositories/activity-repository";
 import { CreateActivityInput } from "../types/activities.types";
-
-const activitiesKeys = {
-  all: ["activities"] as const,
-};
 
 export function useGetActivities() {
   const {
@@ -53,9 +50,11 @@ export function useCreateActivity() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["get activities"] });
       router.push("/activities");
+      appToast.success("Активность создана");
     },
     onError: (error) => {
       console.error(error);
+      appToast.error("Ошибка при создании");
     },
   });
   return { createActivity };
@@ -73,10 +72,35 @@ export function useUpdateActivity(id: number) {
         queryClient.invalidateQueries({ queryKey: ["get activities"] });
         queryClient.invalidateQueries({ queryKey: ["get activity by id", id] });
         router.push("/activities");
+        appToast.success("Активность изменена");
       },
       onError: (error) => {
         console.error(error);
+        appToast.error("Ошибка при изменении");
       },
     });
   return { updateActivity, isActivityUpdatingError };
+}
+
+export function useDeleteActivity() {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const {
+    mutate: deleteActivity,
+    isPending: isActivityDeleting,
+    isError: isActivityDeletingError,
+  } = useMutation({
+    mutationKey: ["delete activity"],
+    mutationFn: (id: number) => activityRepository.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["get activities"] });
+      router.push("/activities");
+      appToast.success("Активность удалена");
+    },
+    onError: (error) => {
+      console.error(error);
+      appToast.error("Ошибка при удалении");
+    },
+  });
+  return { deleteActivity, isActivityDeletingError, isActivityDeleting };
 }

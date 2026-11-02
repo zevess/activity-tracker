@@ -2,7 +2,6 @@ import { CategoryOption } from "@/data/types/categories.types";
 import { useAppTheme } from "@/theme/theme-provider";
 import { Pressable, View } from "react-native";
 import { AppText } from "../../../components/ui/app-text";
-import { IconName } from "../../../components/ui/icon";
 import { CategoryChip } from "./category-chip";
 
 export type CategoryPickerProps = {
@@ -42,7 +41,7 @@ export function CategoryPicker({
               }}
             >
               <CategoryChip
-                icon={option.icon as IconName}
+                icon={option.icon}
                 name={option.name}
                 color={option.color}
                 pressable

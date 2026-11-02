@@ -5,77 +5,107 @@ import { CreateActivityInput } from "../types/activities.types";
 
 export const activityRepository = {
   async getAll() {
-    const rows = await db.query.activities.findMany({
-      where: eq(activities.isArchived, false),
-      orderBy: [desc(activities.createdAt)],
-      with: {
-        category: true,
-      },
-    });
-    return rows.map((row) => ({
-      ...row,
-      targetDays: row.targetDays
-        ? (JSON.parse(row.targetDays) as number[])
-        : null,
-    }));
+    try {
+      const rows = await db.query.activities.findMany({
+        where: eq(activities.isArchived, false),
+        orderBy: [desc(activities.createdAt)],
+        with: {
+          category: true,
+        },
+      });
+      return rows.map((row) => ({
+        ...row,
+        targetDays: row.targetDays
+          ? (JSON.parse(row.targetDays) as number[])
+          : null,
+      }));
+    } catch (error) {
+      console.error(error);
+    }
   },
   async getById(id: number) {
-    const result = await db
-      .select()
-      .from(activities)
-      .where(eq(activities.id, id))
-      .limit(1);
-    return result[0] ?? null;
+    try {
+      const result = await db.query.activities.findFirst({
+        where: eq(activities.id, id),
+        with: {
+          category: true,
+        },
+      });
+      if (!result) {
+        return null;
+      }
+      const transformed = {
+        ...result,
+        targetDays: result?.targetDays
+          ? (JSON.parse(result.targetDays) as number[])
+          : null,
+      };
+      return transformed;
+    } catch (error) {
+      console.error(error);
+    }
   },
   async create(data: CreateActivityInput) {
-    const result = await db
-      .insert(activities)
-      .values({
-        title: data.title,
-        description: data.description ?? null,
-        type: data.type,
-        categoryId: data.categoryId ?? null,
+    try {
+      const result = await db
+        .insert(activities)
+        .values({
+          title: data.title,
+          description: data.description ?? null,
+          type: data.type,
+          categoryId: data.categoryId ?? null,
 
-        scheduleType: data.scheduleType ?? null,
-        targetDays:
-          data.targetDays && data.targetDays.length > 0
-            ? JSON.stringify(data.targetDays)
-            : null,
-        reminderTime: data.reminderTime ?? null,
+          scheduleType: data.scheduleType ?? null,
+          targetDays:
+            data.targetDays && data.targetDays.length > 0
+              ? JSON.stringify(data.targetDays)
+              : null,
+          reminderTime: data.reminderTime ?? null,
 
-        dueDate: data.dueDate ?? null,
-        priority: data.priority ?? null,
-      })
-      .returning();
-    return result[0];
+          dueDate: data.dueDate ?? null,
+          priority: data.priority ?? null,
+        })
+        .returning();
+      return result[0];
+    } catch (error) {
+      console.error(error);
+    }
   },
 
   async update(id: number, data: CreateActivityInput) {
-    const result = await db
-      .update(activities)
-      .set({
-        title: data.title,
-        description: data.description ?? null,
-        type: data.type,
-        categoryId: data.categoryId ?? null,
+    try {
+      const result = await db
+        .update(activities)
+        .set({
+          title: data.title,
+          description: data.description ?? null,
+          type: data.type,
+          categoryId: data.categoryId ?? null,
 
-        scheduleType: data.scheduleType ?? null,
-        targetDays:
-          data.targetDays && data.targetDays.length > 0
-            ? JSON.stringify(data.targetDays)
-            : null,
-        reminderTime: data.reminderTime ?? null,
+          scheduleType: data.scheduleType ?? null,
+          targetDays:
+            data.targetDays && data.targetDays.length > 0
+              ? JSON.stringify(data.targetDays)
+              : null,
+          reminderTime: data.reminderTime ?? null,
 
-        dueDate: data.dueDate ?? null,
-        priority: data.priority ?? null,
-        updatedAt: new Date(),
-      })
-      .where(eq(activities.id, id))
-      .returning();
-    return result[0];
+          dueDate: data.dueDate ?? null,
+          priority: data.priority ?? null,
+          updatedAt: new Date(),
+        })
+        .where(eq(activities.id, id))
+        .returning();
+      return result[0];
+    } catch (error) {
+      console.error(error);
+    }
   },
 
   async delete(id: number) {
-    await db.delete(activities).where(eq(activities.id, id));
+    try {
+      await db.delete(activities).where(eq(activities.id, id));
+    } catch (error) {
+      console.error(error);
+    }
   },
 };

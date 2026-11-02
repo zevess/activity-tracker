@@ -10,12 +10,12 @@ export default function NewActivityScreen() {
       <View
         style={{
           flexDirection: "row",
-          justifyContent: "space-between",
           alignItems: "center",
+          gap: 24,
         }}
       >
         <BackButton />
-        <AppText variant="hero">Новая активность</AppText>
+        <AppText variant="title">Новая активность</AppText>
       </View>
       <ActivityForm mode="create" />
     </Screen>

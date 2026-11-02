@@ -1,5 +1,6 @@
 import {
   useCreateActivity,
+  useDeleteActivity,
   useUpdateActivity,
 } from "@/data/queries/activities.queries";
 import { useGetCategories } from "@/data/queries/categories.queries";
@@ -41,6 +42,7 @@ export function ActivityForm({
 }: ActivityFormProps) {
   const { createActivity } = useCreateActivity();
   const { updateActivity } = useUpdateActivity(Number(activityId));
+  const { deleteActivity, isActivityDeleting } = useDeleteActivity();
   const { categories } = useGetCategories();
   const defaultCategory = getDefaultCategory(categories);
 
@@ -72,6 +74,10 @@ export function ActivityForm({
     if (mode === "edit") {
       updateActivity(payload);
     }
+  }
+
+  function onDelete() {
+    deleteActivity(Number(activityId));
   }
 
   function onError(errors: any) {
@@ -206,6 +212,15 @@ export function ActivityForm({
         onPress={handleSubmit(onSubmit, onError)}
         label={mode === "create" ? "Добавить" : "Сохранить"}
       />
+      {mode === "edit" && (
+        <Button
+          variant="danger"
+          disabled={isActivityDeleting}
+          loading={isActivityDeleting}
+          onPress={onDelete}
+          label={"Удалить"}
+        />
+      )}
     </View>
   );
 }

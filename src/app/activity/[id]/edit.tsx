@@ -26,12 +26,12 @@ export default function EditActivityScreen() {
       <View
         style={{
           flexDirection: "row",
-          justifyContent: "space-between",
           alignItems: "center",
+          gap: 24,
         }}
       >
         <BackButton />
-        <AppText variant="hero">Изменить активность</AppText>
+        <AppText variant="title">Изменить активность</AppText>
       </View>
       <ActivityForm
         key={activityId}

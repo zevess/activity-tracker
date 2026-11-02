@@ -6,7 +6,7 @@ import { IconName } from "../../../components/ui/icon";
 
 type CategoryChipProps = {
   name: string;
-  icon: IconName;
+  icon: string;
   color: string;
   size?: "sm" | "md" | "lg";
   pressable?: boolean;
@@ -50,7 +50,11 @@ export function CategoryChip({
   };
   return (
     <View style={pressable ? pressableStyles : defaultStyles}>
-      <Ionicons name={icon} size={chipIconSize} color={`${colors.text}/30`} />
+      <Ionicons
+        name={icon as IconName}
+        size={chipIconSize}
+        color={`${colors.text}/30`}
+      />
       <AppText variant={chipTextSize}>{name}</AppText>
     </View>
   );
