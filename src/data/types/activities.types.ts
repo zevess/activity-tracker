@@ -9,6 +9,9 @@ export type ScheduleType = (typeof SCHEDULE_TYPES)[number];
 export const PRIORITY = ["low", "medium", "high"] as const;
 export type Priority = (typeof PRIORITY)[number];
 
+export const STATUS = ["done", "missed", "skipped"] as const;
+export type Status = (typeof STATUS)[number];
+
 export type SelectOption<T extends string = string> = {
   value: T;
   label: string;
@@ -50,6 +53,21 @@ export const priorityOptions = [
     label: "Высокий",
   },
 ] satisfies SelectOption<Priority>[];
+
+export const activityStatusOptions = [
+  {
+    value: "done",
+    label: "Завершено",
+  },
+  {
+    value: "missed",
+    label: "Пропущено",
+  },
+  {
+    value: "skipped",
+    label: "Не выполнено",
+  },
+] satisfies SelectOption<Status>[];
 
 export interface Activity {
   id: number;

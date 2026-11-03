@@ -46,20 +46,25 @@ export function ActivitiesList({
   }
   return (
     <View style={{ gap: 16 }}>
-      <View style={{ gap: 12 }}>
-        <SectionHeader title="Привычки" />
-        {habits.map((habit) => (
-          <ActivityCard key={habit.id} activity={habit} />
-        ))}
-      </View>
-      <Divider />
-
-      <View style={{ gap: 12 }}>
-        <SectionHeader title="Активности" />
-        {oneOffs.map((oneOff) => (
-          <ActivityCard key={oneOff.id} activity={oneOff} />
-        ))}
-      </View>
+      {habits.length > 0 && (
+        <>
+          <View style={{ gap: 12 }}>
+            <SectionHeader title="Привычки" />
+            {habits.map((habit) => (
+              <ActivityCard key={habit.id} activity={habit} />
+            ))}
+          </View>
+          <Divider />
+        </>
+      )}
+      {oneOffs.length > 0 && (
+        <View style={{ gap: 12 }}>
+          <SectionHeader title="Активности" />
+          {oneOffs.map((oneOff) => (
+            <ActivityCard key={oneOff.id} activity={oneOff} />
+          ))}
+        </View>
+      )}
     </View>
   );
 }

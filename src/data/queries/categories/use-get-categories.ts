@@ -1,9 +1,5 @@
+import { categoryRepository } from "@/data/repositories/category-repository";
 import { useQuery } from "@tanstack/react-query";
-import { categoryRepository } from "../repositories/category-repository";
-
-const categoriesKeys = {
-  all: ["categories"] as const,
-};
 
 export function useGetCategories() {
   const {
@@ -12,7 +8,7 @@ export function useGetCategories() {
     isSuccess: isCategoriesLoaded,
     isError: isCategoriesError,
   } = useQuery({
-    queryKey: categoriesKeys.all,
+    queryKey: ["get all categories"],
     queryFn: () => categoryRepository.getAll(),
   });
   return {

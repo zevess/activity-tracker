@@ -1,9 +1,7 @@
-import {
-  useCreateActivity,
-  useDeleteActivity,
-  useUpdateActivity,
-} from "@/data/queries/activities.queries";
-import { useGetCategories } from "@/data/queries/categories.queries";
+import { useCreateActivity } from "@/data/queries/activities/use-create-activity";
+import { useDeleteActivity } from "@/data/queries/activities/use-delete-activity";
+import { useUpdateActivity } from "@/data/queries/activities/use-update-activity";
+import { useGetCategories } from "@/data/queries/categories/use-get-categories";
 import {
   createActivitySchema,
   CreateActivitySchema,

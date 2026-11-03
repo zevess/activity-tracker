@@ -1,7 +1,7 @@
 import { AppText } from "@/components/ui/app-text";
 import { BackButton } from "@/components/ui/back-button";
 import { Screen } from "@/components/ui/screen";
-import { useGetActivityById } from "@/data/queries/activities.queries";
+import { useGetActivityById } from "@/data/queries/activities/use-get-activity-by-id";
 import { ActivityForm } from "@/features/activities/ui/activity-form";
 import { useInitialData } from "@/hooks/use-initial-data";
 import { useLocalSearchParams } from "expo-router";

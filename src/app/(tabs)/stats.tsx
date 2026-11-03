@@ -1,10 +1,18 @@
+import { AppText } from "@/components/ui/app-text";
 import { Screen } from "@/components/ui/screen";
-import { Text } from "react-native";
+import { View } from "react-native";
 
 export default function StatsScreen() {
   return (
     <Screen>
-      <Text style={{ fontSize: 24, fontWeight: "semibold" }}>Статистика</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <AppText variant="hero">Статистика</AppText>
+      </View>
     </Screen>
   );
 }

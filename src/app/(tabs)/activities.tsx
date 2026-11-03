@@ -1,7 +1,7 @@
 import { AppText } from "@/components/ui/app-text";
 import { IconButton } from "@/components/ui/icon-button";
 import { Screen } from "@/components/ui/screen";
-import { useGetActivities } from "@/data/queries/activities.queries";
+import { useGetActivities } from "@/data/queries/activities/use-get-activities";
 import { ActivitiesList } from "@/features/activities/ui/activities-list";
 import { Link } from "expo-router";
 import { View } from "react-native";

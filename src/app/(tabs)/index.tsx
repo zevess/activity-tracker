@@ -1,12 +1,20 @@
+import { AppText } from "@/components/ui/app-text";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Screen } from "@/components/ui/screen";
-import { Text } from "react-native";
+import { View } from "react-native";
 
 export default function HomeScreen() {
   return (
     <Screen>
-      <Text style={{ fontSize: 24, fontWeight: "semibold" }}>Home</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <AppText variant="hero">Сегодня</AppText>
+      </View>
       <Card>
         <Button label="Primary" />
         <Button label="Secondary" variant="secondary" />

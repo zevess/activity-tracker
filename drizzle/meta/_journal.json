@@ -43,6 +43,13 @@
       "when": 1793124035388,
       "tag": "0005_low_radioactive_man",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1793702661518,
+      "tag": "0006_careless_maverick",
+      "breakpoints": true
     }
   ]
 }

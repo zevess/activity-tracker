@@ -1,22 +1,22 @@
-import { Card } from "@/components/ui/card";
+import { AppText } from "@/components/ui/app-text";
 import { Screen } from "@/components/ui/screen";
-import { Link, useRouter } from "expo-router";
-import { Button, Text } from "react-native";
+import { Link } from "expo-router";
+import { View } from "react-native";
 
 export default function SettingsScreen() {
-  const router = useRouter();
   return (
     <Screen>
-      <Text style={{ fontSize: 24, fontWeight: "semibold" }}>Настройки</Text>
-      <Card>
-        <Text style={{ fontSize: 24 }}>Такого экрана нету</Text>
-        <Link href={"/"} style={{ textDecorationLine: "underline" }}>
-          На главную
-        </Link>
-      </Card>
-      {__DEV__ && (
-        <Button title="Тест ДБ" onPress={() => router.push("/dev")} />
-      )}
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <AppText variant="hero">Настройки</AppText>
+      </View>
+      <View>
+        <Link href={"/archive"}>Архив</Link>
+      </View>
     </Screen>
   );
 }

@@ -1,6 +1,6 @@
 import {
-    ActivityType,
-    activityTypeOptions
+  ActivityType,
+  activityTypeOptions,
 } from "@/data/types/activities.types";
 
 export function getFormatedType(activityType?: ActivityType) {
