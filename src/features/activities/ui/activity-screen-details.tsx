@@ -1,8 +1,8 @@
 import { AppText } from "@/components/ui/app-text";
 import { Activity } from "@/data/types/activities.types";
 import { CategoryChip } from "@/features/categories/ui/category-chip";
-import { getConvertedDays, getFormatedDate } from "@/lib/date/date";
 import { useAppTheme } from "@/theme/theme-provider";
+import { getConvertedDays, getFormatedDate } from "@/utils/date";
 import { View } from "react-native";
 import { getFormatedPriority } from "../lib/get-formated-priority";
 

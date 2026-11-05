@@ -9,12 +9,14 @@ type ActivitiesListProps = {
   activities: Activity[];
   isLoading: boolean;
   isError: boolean;
+  isUpcoming?: boolean;
 };
 
 export function ActivitiesList({
   activities,
   isLoading,
   isError,
+  isUpcoming = false,
 }: ActivitiesListProps) {
   const oneOffs = activities.filter((activity) => activity.type === "one_off");
   const habits = activities.filter((acitivity) => acitivity.type === "habit");
@@ -49,7 +51,9 @@ export function ActivitiesList({
       {habits.length > 0 && (
         <>
           <View style={{ gap: 12 }}>
-            <SectionHeader title="Привычки" />
+            <SectionHeader
+              title={isUpcoming ? "Ближайшие привычки" : "Привычки"}
+            />
             {habits.map((habit) => (
               <ActivityCard key={habit.id} activity={habit} />
             ))}
@@ -59,7 +63,9 @@ export function ActivitiesList({
       )}
       {oneOffs.length > 0 && (
         <View style={{ gap: 12 }}>
-          <SectionHeader title="Активности" />
+          <SectionHeader
+            title={isUpcoming ? "Ближайшие активности" : "Активности"}
+          />
           {oneOffs.map((oneOff) => (
             <ActivityCard key={oneOff.id} activity={oneOff} />
           ))}

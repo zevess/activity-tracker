@@ -1,6 +1,6 @@
 import { CreateActivitySchema } from "@/data/schema/activity.schema";
 import { Activity } from "@/data/types/activities.types";
-import { getTomorrowDate } from "@/lib/date/date";
+import { getTomorrowDate } from "@/utils/date";
 import { useMemo } from "react";
 
 export const defaultInitialData: CreateActivitySchema = {

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useActivityStatus } from "@/data/queries/activities/use-get-activity-status";
 import { useMarkActivityAsCompleted } from "@/data/queries/activities/use-mark-activity";
 import { Activity } from "@/data/types/activities.types";
+import { getISODay } from "date-fns";
 import { View } from "react-native";
 import { getFormatedStatus } from "../lib/get-formated-status";
 
@@ -16,11 +17,19 @@ export function ActivityMarkButton({
   activityId,
 }: ActivityMarkButtonProps) {
   const date = new Date();
-
+  const isoDayNumber = getISODay(date);
   const { activityStatus } = useActivityStatus(activityId, date);
   const { markActivity, isActivityMarking } = useMarkActivityAsCompleted();
   const status = getFormatedStatus(activityStatus);
-  const isSameDate = activity?.targetDays?.includes(date.getDay());
+  const isScheduledToday = activity?.targetDays?.includes(isoDayNumber);
+  const isCompleted = status?.value === "done";
+  
+  const shouldShowMarkButton =
+    (activity?.type === "habit" && isScheduledToday && !isCompleted) ||
+    (activity?.type === "one_off" && !isCompleted);
+  const shouldShowCompletedMessage = isCompleted;
+  const shouldShowNotScheduledMessage =
+    activity?.type === "habit" && !isScheduledToday;
 
   function handlePress() {
     if (activity) {
@@ -33,7 +42,7 @@ export function ActivityMarkButton({
   }
   return (
     <View>
-      {status?.value !== "done" && (
+      {shouldShowMarkButton && (
         <Button
           disabled={isActivityMarking}
           loading={isActivityMarking}
@@ -41,12 +50,12 @@ export function ActivityMarkButton({
           label={"Завершить"}
         />
       )}
-      {status?.value === "done" && isSameDate && (
+      {shouldShowCompletedMessage && (
         <AppText style={{ alignSelf: "center" }} tone="muted" variant="title">
-          {status.label}
+          {status.label ?? "Завершено"}
         </AppText>
       )}
-      {activity?.type === "habit" && !isSameDate && (
+      {shouldShowNotScheduledMessage && (
         <AppText style={{ alignSelf: "center" }} tone="muted" variant="title">
           День еще не наступил
         </AppText>

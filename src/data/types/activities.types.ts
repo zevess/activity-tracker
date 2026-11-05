@@ -85,6 +85,10 @@ export interface Activity {
   completedAt: Date | null;
 
   category?: CategoryOption | null;
+
+  isOverdue?: boolean | null;
+  nextDueDate?: Date | null;
+  isCompletedToday?: boolean | null;
 }
 
 export type CreateActivityInput = {

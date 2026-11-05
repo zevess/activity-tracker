@@ -36,7 +36,7 @@ export const daysOptions: DayOption[] = [
     label: "СБ",
   },
   {
-    value: 0,
+    value: 7,
     name: "Воскресенье",
     label: "ВС",
   },

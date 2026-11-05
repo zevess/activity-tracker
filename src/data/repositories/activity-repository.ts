@@ -1,6 +1,8 @@
+import { getNextHabitDueDate } from "@/utils/get-next-habit-due-date";
+import { format, isBefore } from "date-fns";
 import { and, desc, eq, isNotNull, isNull, or } from "drizzle-orm";
 import { db } from "../db";
-import { activities } from "../db/schema";
+import { activities, activityLogs } from "../db/schema";
 import { CreateActivityInput } from "../types/activities.types";
 
 export const activityRepository = {
@@ -161,5 +163,86 @@ export const activityRepository = {
     } catch (error) {
       console.error(error);
     }
+  },
+
+  async getUpcoming(limit: number = 5) {
+    const now = new Date();
+    const todayStr = format(now, "yyyy-MM-dd");
+    const allActivities = await db.query.activities.findMany({
+      where: and(
+        eq(activities.isArchived, false),
+        isNull(activities.completedAt),
+      ),
+      with: {
+        category: true,
+      },
+    });
+    const todayLogs = await db
+      .select({ activityId: activityLogs.activityId })
+      .from(activityLogs)
+      .where(
+        and(eq(activityLogs.date, todayStr), eq(activityLogs.status, "done")),
+      );
+    const completedTodayIds = new Set(todayLogs.map((log) => log.activityId));
+
+    const enriched = allActivities
+      .map((activity) => {
+        let nextDueDate: Date;
+        let isOverdue = false;
+        let isCompletedToday = false;
+        if (activity.type === "one_off") {
+          isCompletedToday = activity.completedAt !== null;
+          if (isCompletedToday) {
+            nextDueDate = activity.completedAt!;
+          } else if (activity.dueDate) {
+            const [y, m, d] = activity.dueDate.split("-").map(Number);
+            const [h = 23, min = 59] = (activity.reminderTime || "23:59")
+              .split(":")
+              .map(Number);
+            nextDueDate = new Date(y, m - 1, d, h, min);
+            isOverdue = isBefore(nextDueDate, now);
+          } else {
+            nextDueDate = new Date(9999, 11, 31, 23, 59);
+          }
+        } else {
+          isCompletedToday = completedTodayIds.has(activity.id);
+          const targetDays = activity.targetDays
+            ? (JSON.parse(activity.targetDays) as number[])
+            : [];
+
+          nextDueDate = getNextHabitDueDate({
+            targetDays,
+            reminderTime: activity.reminderTime,
+            isCompletedToday,
+            now,
+          });
+
+          isOverdue =
+            !isCompletedToday &&
+            format(nextDueDate, "yyyy-MM-dd") === todayStr &&
+            isBefore(nextDueDate, now);
+        }
+        return {
+          ...activity,
+          targetDays: activity.targetDays
+            ? (JSON.parse(activity.targetDays) as number[])
+            : null,
+          nextDueDate,
+          isOverdue,
+          isCompletedToday: isCompletedToday,
+        };
+      })
+      .filter((a): a is NonNullable<typeof a> => a !== null);
+
+    enriched.sort((a, b) => {
+      if (a.isCompletedToday !== b.isCompletedToday) {
+        return a.isCompletedToday ? 1 : -1;
+      }
+      if (a.isOverdue !== b.isOverdue) {
+        return a.isOverdue ? -1 : 1;
+      }
+      return a.nextDueDate.getTime() - b.nextDueDate.getTime();
+    });
+    return enriched;
   },
 };
