@@ -58,6 +58,17 @@ export const activityLogs = sqliteTable("activity_logs", {
     .default(sql`(unixepoch())`),
 });
 
+export const userProfile = sqliteTable("user_profile", {
+  id: integer("id").primaryKey().default(1),
+  name: text("name").notNull().default("Пользователь"),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+  updatedAt: integer("updated_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
+
 export const activityLogsRelations = relations(activityLogs, ({ one }) => ({
   activity: one(activities, {
     fields: [activityLogs.activityId],

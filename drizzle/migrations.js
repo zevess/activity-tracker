@@ -8,6 +8,7 @@ import m0003 from './0003_polite_loa.sql';
 import m0004 from './0004_neat_daredevil.sql';
 import m0005 from './0005_low_radioactive_man.sql';
 import m0006 from './0006_careless_maverick.sql';
+import m0007 from './0007_dear_umar.sql';
 
   export default {
     journal,
@@ -18,7 +19,8 @@ m0002,
 m0003,
 m0004,
 m0005,
-m0006
+m0006,
+m0007
     }
   }
   

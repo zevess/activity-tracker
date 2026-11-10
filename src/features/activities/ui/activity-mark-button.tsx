@@ -1,6 +1,6 @@
 import { AppText } from "@/components/ui/app-text";
 import { Button } from "@/components/ui/button";
-import { useActivityStatus } from "@/data/queries/activities/use-get-activity-status";
+import { useGetActivityStatus } from "@/data/queries/activities/use-get-activity-status";
 import { useMarkActivityAsCompleted } from "@/data/queries/activities/use-mark-activity";
 import { Activity } from "@/data/types/activities.types";
 import { getISODay } from "date-fns";
@@ -18,12 +18,12 @@ export function ActivityMarkButton({
 }: ActivityMarkButtonProps) {
   const date = new Date();
   const isoDayNumber = getISODay(date);
-  const { activityStatus } = useActivityStatus(activityId, date);
+  const { activityStatus } = useGetActivityStatus(activityId, date);
   const { markActivity, isActivityMarking } = useMarkActivityAsCompleted();
   const status = getFormatedStatus(activityStatus);
   const isScheduledToday = activity?.targetDays?.includes(isoDayNumber);
   const isCompleted = status?.value === "done";
-  
+
   const shouldShowMarkButton =
     (activity?.type === "habit" && isScheduledToday && !isCompleted) ||
     (activity?.type === "one_off" && !isCompleted);
@@ -52,7 +52,7 @@ export function ActivityMarkButton({
       )}
       {shouldShowCompletedMessage && (
         <AppText style={{ alignSelf: "center" }} tone="muted" variant="title">
-          {status.label ?? "Завершено"}
+          {status.label ?? "Выполнено"}
         </AppText>
       )}
       {shouldShowNotScheduledMessage && (

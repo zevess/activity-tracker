@@ -2,7 +2,10 @@ import { activityLogsRepository } from "@/data/repositories/activity-logs-reposi
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 
-export function useActivityStatus(activityId: number, date: Date = new Date()) {
+export function useGetActivityStatus(
+  activityId: number,
+  date: Date = new Date(),
+) {
   const dateStr = format(date, "yyyy-MM-dd");
   const {
     data: activityStatus,

@@ -1,8 +1,8 @@
 import { Divider } from "@/components/ui/divider";
 import { SectionHeader } from "@/components/ui/section-header";
+import { StatusMessage } from "@/components/ui/status-message";
 import { Activity } from "@/data/types/activities.types";
-import { ActivityIndicator, View } from "react-native";
-import { AppText } from "../../../components/ui/app-text";
+import { View } from "react-native";
 import { ActivityCard } from "./activity-card";
 
 type ActivitiesListProps = {
@@ -21,31 +21,16 @@ export function ActivitiesList({
   const oneOffs = activities.filter((activity) => activity.type === "one_off");
   const habits = activities.filter((acitivity) => acitivity.type === "habit");
   if (isLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
+    return <StatusMessage isLoading />;
   }
 
   if (isError) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <AppText variant="title" tone="muted">
-          Список активностей пуст
-        </AppText>
-      </View>
-    );
+    return <StatusMessage text="Список активностей пуст" />;
   }
   if (activities.length === 0) {
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <AppText variant="title" tone="muted">
-          Список активностей пуст
-        </AppText>
-      </View>
-    );
+    return <StatusMessage text="Список активностей пуст" />;
   }
+
   return (
     <View style={{ gap: 16 }}>
       {habits.length > 0 && (

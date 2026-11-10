@@ -35,8 +35,13 @@ export function useMarkActivityAsCompleted() {
         queryKey: ["get activity status", activityId, dateStr],
       });
       queryClient.invalidateQueries({ queryKey: ["get activities"] });
-      router.push("/activities");
-      appToast.success("Активность отмечена");
+      queryClient.invalidateQueries({ queryKey: ["get upcoming activities"] });
+      queryClient.invalidateQueries({
+        queryKey: ["get completed today activities"],
+      });
+
+      router.back();
+      appToast.success("Активность выполнена");
     },
     onError: (error) => {
       console.error(error);

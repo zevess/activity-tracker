@@ -1,12 +1,14 @@
 import { AppText } from "@/components/ui/app-text";
 import { Screen } from "@/components/ui/screen";
-import { useGetUpcomingActivities } from "@/data/queries/activities/use-get-upcoming-activities";
-import { ActivitiesList } from "@/features/activities/ui/activities-list";
+import { useGetUserProfile } from "@/data/queries/user/use-get-user-profile";
+import { ActivitiesSections } from "@/features/activities/ui/activities-sections";
+import { getTimeOfDay } from "@/utils/get-time-of-day";
 import { View } from "react-native";
 
 export default function HomeScreen() {
-  const { upcomingActivities, isUpcomingError, isUpcomingLoading } =
-    useGetUpcomingActivities();
+  const { profile } = useGetUserProfile();
+  const timeOfDay = getTimeOfDay();
+
   return (
     <Screen>
       <View
@@ -15,16 +17,12 @@ export default function HomeScreen() {
           justifyContent: "space-between",
         }}
       >
-        <AppText variant="hero">Сегодня</AppText>
+        <AppText variant="hero">
+          {timeOfDay}, {profile?.name}
+        </AppText>
       </View>
-      {upcomingActivities && (
-        <ActivitiesList
-          isUpcoming
-          isError={isUpcomingError}
-          isLoading={isUpcomingLoading}
-          activities={upcomingActivities}
-        />
-      )}
+
+      <ActivitiesSections />
     </Screen>
   );
 }
