@@ -27,7 +27,6 @@ export function Collapsible({
           justifyContent: "space-between",
           alignItems: "center",
           paddingVertical: spacing.sm,
-          // backgroundColor: open ? colors.surfaceStrong : 'transparent',
           borderRadius: radius.md,
         }}
       >
@@ -40,7 +39,7 @@ export function Collapsible({
       </Pressable>
 
       {open && (
-        <View style={{ gap: spacing.sm, width: "100%", marginTop: spacing.xs }}>
+        <View style={{ gap: spacing.md, width: "100%", marginTop: spacing.xs }}>
           {children}
         </View>
       )}

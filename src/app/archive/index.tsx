@@ -1,17 +1,17 @@
 import { AppText } from "@/components/ui/app-text";
 import { BackButton } from "@/components/ui/back-button";
 import { Screen } from "@/components/ui/screen";
-
+import { useGetArchivedActivities } from "@/data/queries/activities/use-get-archived-activities";
 import { ActivitiesList } from "@/features/activities/ui/activities-list";
 import { View } from "react-native";
 
 export default function ArchiveScreen() {
-  // const {
-  //   completedActivities,
-  //   isCompletedActivitiesLoaded,
-  //   isCompletedActivitiesLoading,
-  //   isCompletedActivitiesError,
-  // } = useGetCompletedActivities();
+  const {
+    archivedActivities,
+    isArchivedError,
+    isArchivedLoaded,
+    isArchivedLoading,
+  } = useGetArchivedActivities();
   return (
     <Screen>
       <View
@@ -24,13 +24,13 @@ export default function ArchiveScreen() {
         <BackButton />
         <AppText variant="title">Архив</AppText>
       </View>
-      {/* {isCompletedActivitiesLoaded && (
+      {isArchivedLoaded && (
         <ActivitiesList
-          isError={isCompletedActivitiesError}
-          isLoading={isCompletedActivitiesLoading}
-          activities={completedActivities ?? []}
+          isError={isArchivedError}
+          isLoading={isArchivedLoading}
+          activities={archivedActivities ?? []}
         />
-      )} */}
+      )}
     </Screen>
   );
 }

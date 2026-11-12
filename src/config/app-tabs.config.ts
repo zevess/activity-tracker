@@ -2,14 +2,13 @@ import { IconName } from "@/components/ui/icon";
 
 export type TabName = "index" | "activities" | "stats" | "settings";
 
-export interface ITab {
+export type Tab = {
   name: TabName;
   title: string;
   icon: IconName;
-}
+};
 
-
-export const tabs: ITab[] = [
+export const tabs: Tab[] = [
   {
     name: "index",
     icon: "today",

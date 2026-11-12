@@ -1,0 +1,1 @@
+ALTER TABLE `activities` ADD `archived_at` integer DEFAULT (unixepoch());

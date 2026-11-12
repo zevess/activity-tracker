@@ -23,13 +23,15 @@ export function ActivityMarkButton({
   const status = getFormatedStatus(activityStatus);
   const isScheduledToday = activity?.targetDays?.includes(isoDayNumber);
   const isCompleted = status?.value === "done";
+  const isArchived = activity?.isArchived;
 
   const shouldShowMarkButton =
     (activity?.type === "habit" && isScheduledToday && !isCompleted) ||
     (activity?.type === "one_off" && !isCompleted);
-  const shouldShowCompletedMessage = isCompleted;
+  const shouldShowCompletedMessage = isCompleted && !isArchived;
   const shouldShowNotScheduledMessage =
-    activity?.type === "habit" && !isScheduledToday;
+    activity?.type === "habit" && !isScheduledToday && !isArchived;
+  const shouldShowArchivedMessage = isArchived;
 
   function handlePress() {
     if (activity) {
@@ -52,12 +54,17 @@ export function ActivityMarkButton({
       )}
       {shouldShowCompletedMessage && (
         <AppText style={{ alignSelf: "center" }} tone="muted" variant="title">
-          {status.label ?? "Выполнено"}
+          {"Выполнено"}
         </AppText>
       )}
       {shouldShowNotScheduledMessage && (
         <AppText style={{ alignSelf: "center" }} tone="muted" variant="title">
           День еще не наступил
+        </AppText>
+      )}
+      {shouldShowArchivedMessage && (
+        <AppText style={{ alignSelf: "center" }} tone="muted" variant="title">
+          Архивировано
         </AppText>
       )}
     </View>

@@ -3,6 +3,7 @@ import { Activity } from "@/data/types/activities.types";
 import { CategoryChip } from "@/features/categories/ui/category-chip";
 import { useAppTheme } from "@/theme/theme-provider";
 import { getConvertedDays, getFormatedDate } from "@/utils/date";
+import { format } from "date-fns";
 import { View } from "react-native";
 import { getFormatedPriority } from "../lib/get-formated-priority";
 
@@ -19,6 +20,10 @@ export function ActivityScreenDetails({
   );
   const formatedDate = getFormatedDate(activity?.dueDate ?? "");
   const formatedPriority = getFormatedPriority(activity?.priority);
+  const formatedCompletedAt =
+    activity?.completedAt && format(activity?.completedAt, "dd.MM.yyyy");
+  const formatedArchivedAt =
+    activity?.archivedAt && format(activity?.archivedAt, "dd.MM.yyyy");
   return (
     <View
       style={{
@@ -61,6 +66,24 @@ export function ActivityScreenDetails({
               Дата
             </AppText>
             <AppText variant="title">{formatedDate}</AppText>
+          </View>
+        )}
+
+        {activity?.completedAt && (
+          <View>
+            <AppText variant="caption" tone="muted">
+              Выполнено
+            </AppText>
+            <AppText variant="title">{formatedCompletedAt}</AppText>
+          </View>
+        )}
+
+        {activity?.archivedAt && (
+          <View>
+            <AppText variant="caption" tone="muted">
+              Архивировано
+            </AppText>
+            <AppText variant="title">{formatedArchivedAt}</AppText>
           </View>
         )}
 

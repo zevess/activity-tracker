@@ -39,6 +39,7 @@ export function useMarkActivityAsCompleted() {
       queryClient.invalidateQueries({
         queryKey: ["get completed today activities"],
       });
+      queryClient.invalidateQueries({ queryKey: ["get missed activities"] });
 
       router.back();
       appToast.success("Активность выполнена");

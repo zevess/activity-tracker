@@ -1,6 +1,7 @@
+import { getMissedDays } from "@/utils/get-missed-days";
 import { getNextHabitDueDate } from "@/utils/get-next-habit-due-date";
-import { format, isBefore } from "date-fns";
-import { and, desc, eq, isNull } from "drizzle-orm";
+import { format, isBefore, subDays } from "date-fns";
+import { and, desc, eq, gte, isNotNull, isNull, lt, or } from "drizzle-orm";
 import { db } from "../db";
 import { activities, activityLogs } from "../db/schema";
 import { CreateActivityInput } from "../types/activities.types";
@@ -8,7 +9,7 @@ import { CreateActivityInput } from "../types/activities.types";
 export const activityRepository = {
   async getAll() {
     try {
-      const rows = await db.query.activities.findMany({
+      const allActivities = await db.query.activities.findMany({
         where: and(
           eq(activities.isArchived, false),
           isNull(activities.completedAt),
@@ -18,10 +19,10 @@ export const activityRepository = {
           category: true,
         },
       });
-      return rows.map((row) => ({
-        ...row,
-        targetDays: row.targetDays
-          ? (JSON.parse(row.targetDays) as number[])
+      return allActivities.map((activity) => ({
+        ...activity,
+        targetDays: activity.targetDays
+          ? (JSON.parse(activity.targetDays) as number[])
           : null,
       }));
     } catch (error) {
@@ -108,7 +109,15 @@ export const activityRepository = {
 
   async delete(id: number) {
     try {
-      await db.delete(activities).where(eq(activities.id, id));
+      await db
+        .update(activities)
+        .set({
+          isArchived: true,
+          archivedAt: new Date(),
+          completedAt: new Date(),
+          updatedAt: new Date(),
+        })
+        .where(eq(activities.id, id));
     } catch (error) {
       console.error(error);
     }
@@ -137,6 +146,28 @@ export const activityRepository = {
           updatedAt: new Date(),
         })
         .where(eq(activities.id, id));
+    } catch (error) {
+      console.error(error);
+    }
+  },
+
+  async getArchived() {
+    try {
+      const archivedActivities = await db.query.activities.findMany({
+        where: or(
+          eq(activities.isArchived, true),
+          isNotNull(activities.completedAt),
+        ),
+        with: {
+          category: true,
+        },
+      });
+      return archivedActivities.map((activity) => ({
+        ...activity,
+        targetDays: activity.targetDays
+          ? (JSON.parse(activity.targetDays) as number[])
+          : null,
+      }));
     } catch (error) {
       console.error(error);
     }
@@ -248,6 +279,75 @@ export const activityRepository = {
         return a.nextDueDate.getTime() - b.nextDueDate.getTime();
       });
       return enriched.slice(0, limit);
+    } catch (error) {
+      console.error(error);
+    }
+  },
+
+  async getMissed(limit: number = 10) {
+    try {
+      const now = new Date();
+      const weekAgo = subDays(now, 7);
+      const habits = await db.query.activities.findMany({
+        where: and(
+          eq(activities.isArchived, false),
+          eq(activities.type, "habit"),
+        ),
+        with: {
+          category: true,
+        },
+      });
+
+      const recentLogs = await db
+        .select({
+          activityId: activityLogs.activityId,
+          date: activityLogs.date,
+        })
+        .from(activityLogs)
+        .where(
+          and(
+            eq(activityLogs.status, "done"),
+            gte(activityLogs.date, format(weekAgo, "yyyy-MM-dd")),
+            lt(activityLogs.date, format(now, "yyyy-MM-dd")),
+          ),
+        );
+
+      const logsByActivity = new Map<number, string[]>();
+      recentLogs.forEach((log) => {
+        const existing = logsByActivity.get(log.activityId) || [];
+        existing.push(log.date);
+        logsByActivity.set(log.activityId, existing);
+      });
+
+      const missedHabits = habits
+        .map((habit) => {
+          const targetDays = habit.targetDays
+            ? (JSON.parse(habit.targetDays) as number[])
+            : [];
+          const completedDates = logsByActivity.get(habit.id) || [];
+
+          const { count, lastMissedDate } = getMissedDays({
+            targetDays,
+            createdAt: habit.createdAt,
+            completedDates,
+            now,
+          });
+
+          if (count > 0) {
+            return {
+              ...habit,
+              targetDays,
+              missedCount: count,
+              lastMissedDate,
+            };
+          }
+          return null;
+        })
+        .filter((h): h is NonNullable<typeof h> => h !== null);
+
+      missedHabits.sort((a, b) => b.missedCount - a.missedCount);
+
+      return missedHabits.slice(0, limit);
     } catch (error) {
       console.error(error);
     }

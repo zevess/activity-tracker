@@ -83,12 +83,17 @@ export interface Activity {
   dueDate: string | null;
   priority: Priority | null;
   completedAt: Date | null;
+  archivedAt?: Date | null;
+  updatedAt: Date | null;
 
   category?: CategoryOption | null;
 
+  isArchived?: boolean | null;
   isOverdue?: boolean | null;
   nextDueDate?: Date | null;
   isCompletedToday?: boolean | null;
+  missedCount?: number | null;
+  lastMissedDate?: Date | null;
 }
 
 export type CreateActivityInput = {
