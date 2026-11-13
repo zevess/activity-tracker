@@ -4,15 +4,17 @@ import { CategoryChip } from "@/features/categories/ui/category-chip";
 import { useAppTheme } from "@/theme/theme-provider";
 import { getConvertedDays, getFormatedDate } from "@/utils/date";
 import { format } from "date-fns";
-import { View } from "react-native";
+import { StyleProp, View, ViewStyle } from "react-native";
 import { getFormatedPriority } from "../lib/get-formated-priority";
 
 type ActivityScreenDetailsProps = {
   activity?: Activity | null;
+  style?: StyleProp<ViewStyle>;
 };
 
 export function ActivityScreenDetails({
   activity,
+  style,
 }: ActivityScreenDetailsProps) {
   const { spacing } = useAppTheme();
   const filteredDays = getConvertedDays(
@@ -28,7 +30,7 @@ export function ActivityScreenDetails({
     <View
       style={{
         gap: spacing.xl,
-        flex: 1,
+        // flex: 1,
       }}
     >
       <View style={{ alignItems: "center" }}>

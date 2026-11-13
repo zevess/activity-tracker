@@ -1,6 +1,8 @@
+import { calculateCompletionRate } from "@/features/activities/lib/calculate-completion-rate";
+import { calculateStreaks } from "@/features/activities/lib/calculate-streaks";
 import { getMissedDays } from "@/utils/get-missed-days";
 import { getNextHabitDueDate } from "@/utils/get-next-habit-due-date";
-import { format, isBefore, subDays } from "date-fns";
+import { format, isBefore, startOfMonth, subDays } from "date-fns";
 import { and, desc, eq, gte, isNotNull, isNull, lt, or } from "drizzle-orm";
 import { db } from "../db";
 import { activities, activityLogs } from "../db/schema";
@@ -351,5 +353,59 @@ export const activityRepository = {
     } catch (error) {
       console.error(error);
     }
+  },
+
+  async getStatistics(activityId: number) {
+    const activity = await db.query.activities.findFirst({
+      where: eq(activities.id, activityId),
+    });
+    if (!activity) return null;
+
+    const logs = await db
+      .select({
+        date: activityLogs.date,
+      })
+      .from(activityLogs)
+      .where(
+        and(
+          eq(activityLogs.activityId, activityId),
+          eq(activityLogs.status, "done"),
+        ),
+      );
+
+    const completedDates = logs.map((log) => log.date);
+    const targetDays = activity?.targetDays
+      ? (JSON.parse(activity.targetDays) as number[])
+      : [];
+
+    const { currentStreak, totalCompletions, bestStreak } = calculateStreaks({
+      targetDays,
+      completedDates,
+      createdAt: activity?.createdAt,
+    });
+
+    const completionRateMonth = calculateCompletionRate({
+      targetDays,
+      completedDates,
+      startDate: startOfMonth(new Date()),
+      endDate: new Date(),
+      createdAt: activity.createdAt,
+    });
+
+    const completionRateWeek = calculateCompletionRate({
+      targetDays,
+      completedDates,
+      startDate: subDays(new Date(), 7),
+      endDate: new Date(),
+      createdAt: activity.createdAt,
+    });
+
+    return {
+      totalCompletions,
+      currentStreak,
+      bestStreak,
+      completionRateMonth,
+      completionRateWeek,
+    };
   },
 };

@@ -22,7 +22,7 @@ export function ActivityMarkButton({
   const { markActivity, isActivityMarking } = useMarkActivityAsCompleted();
   const status = getFormatedStatus(activityStatus);
   const isScheduledToday = activity?.targetDays?.includes(isoDayNumber);
-  const isCompleted = status?.value === "done";
+  const isCompleted = status?.value === "done" || activity?.completedAt;
   const isArchived = activity?.isArchived;
 
   const shouldShowMarkButton =
@@ -43,7 +43,7 @@ export function ActivityMarkButton({
     }
   }
   return (
-    <View>
+    <View style={{ marginTop: "auto" }}>
       {shouldShowMarkButton && (
         <Button
           disabled={isActivityMarking}

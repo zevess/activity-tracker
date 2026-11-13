@@ -85,7 +85,12 @@ export function ActivityCard({ activity }: ActivityCardProps) {
                 </AppText>
               )}
               {formatedDate && (
-                <AppText variant="caption">{formatedDate}</AppText>
+                <AppText
+                  tone={activity.isOverdue ? "danger" : "default"}
+                  variant="caption"
+                >
+                  {formatedDate}
+                </AppText>
               )}
             </View>
           </View>
