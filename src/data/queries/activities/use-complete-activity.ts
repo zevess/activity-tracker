@@ -6,13 +6,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useRouter } from "expo-router";
 
-export function useMarkActivityAsCompleted() {
+export function useCompleteActivity() {
   const queryClient = useQueryClient();
   const router = useRouter();
   const {
-    mutate: markActivity,
-    isPending: isActivityMarking,
-    isError: isMarkError,
+    mutate: completeActivity,
+    isPending: isActivityCompleting,
+    isError: isCompleteError,
   } = useMutation({
     mutationKey: ["mark activity"],
     mutationFn: async ({
@@ -25,9 +25,9 @@ export function useMarkActivityAsCompleted() {
       date?: Date;
     }) => {
       if (type === "one_off") {
-        await activityRepository.markOneOffCompleted(activityId);
+        await activityRepository.completeOneOff(activityId);
       }
-      return await activityLogsRepository.markDone(activityId, date);
+      return await activityLogsRepository.complete(activityId, date);
     },
     onSuccess: (_, { activityId, date }) => {
       const dateStr = format(date ?? new Date(), "yyyy-MM-dd");
@@ -40,6 +40,7 @@ export function useMarkActivityAsCompleted() {
         queryKey: ["get completed today activities"],
       });
       queryClient.invalidateQueries({ queryKey: ["get missed activities"] });
+      queryClient.invalidateQueries({ queryKey: ["get global statistics"] });
 
       router.back();
       appToast.success("Активность выполнена");
@@ -49,5 +50,5 @@ export function useMarkActivityAsCompleted() {
       appToast.error("Ошибка при отметке");
     },
   });
-  return { markActivity, isMarkError, isActivityMarking };
+  return { completeActivity, isActivityCompleting, isCompleteError };
 }

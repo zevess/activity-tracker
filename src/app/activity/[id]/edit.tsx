@@ -1,11 +1,12 @@
 import { AppText } from "@/components/ui/app-text";
 import { BackButton } from "@/components/ui/back-button";
 import { Screen } from "@/components/ui/screen";
+import { StatusMessage } from "@/components/ui/status-message";
 import { useGetActivityById } from "@/data/queries/activities/use-get-activity-by-id";
 import { ActivityForm } from "@/features/activities/ui/activity-form";
 import { useInitialData } from "@/hooks/use-initial-data";
 import { useLocalSearchParams } from "expo-router";
-import { ActivityIndicator, View } from "react-native";
+import { View } from "react-native";
 
 export default function EditActivityScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -14,11 +15,7 @@ export default function EditActivityScreen() {
   const { initialData } = useInitialData(activity);
 
   if (isActivityLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
+    return <StatusMessage isLoading />;
   }
 
   return (
@@ -31,7 +28,7 @@ export default function EditActivityScreen() {
         }}
       >
         <BackButton />
-        <AppText variant="title">Изменить активность</AppText>
+        <AppText variant="title">Изменить</AppText>
       </View>
       <ActivityForm
         key={activityId}

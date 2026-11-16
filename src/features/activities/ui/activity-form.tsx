@@ -1,3 +1,4 @@
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { useCreateActivity } from "@/data/queries/activities/use-create-activity";
 import { useDeleteActivity } from "@/data/queries/activities/use-delete-activity";
 import { useUpdateActivity } from "@/data/queries/activities/use-update-activity";
@@ -13,6 +14,7 @@ import {
 } from "@/data/types/activities.types";
 import { daysOptions } from "@/data/types/days.types";
 import { getDefaultCategory } from "@/features/categories/lib/get-default-category";
+import { useConfirmDialog } from "@/hooks/use-confirm-dialog";
 import { defaultInitialData } from "@/hooks/use-initial-data";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
@@ -42,6 +44,7 @@ export function ActivityForm({
   const { updateActivity } = useUpdateActivity(Number(activityId));
   const { deleteActivity, isActivityDeleting } = useDeleteActivity();
   const { categories } = useGetCategories();
+  const { dialogProps, openDialog } = useConfirmDialog();
   const defaultCategory = getDefaultCategory(categories);
 
   const {
@@ -75,7 +78,15 @@ export function ActivityForm({
   }
 
   function onDelete() {
-    deleteActivity(Number(activityId));
+    openDialog(
+      {
+        title: "Архивировать активность?",
+        message: "Активность будет скрыта из списка и отправится в архив",
+        confirmText: "Архивировать",
+        variant: "warning",
+      },
+      () => deleteActivity(Number(activityId)),
+    );
   }
 
   function onError(errors: any) {
@@ -219,6 +230,7 @@ export function ActivityForm({
           label={"Удалить"}
         />
       )}
+      <ConfirmDialog {...dialogProps} />
     </View>
   );
 }

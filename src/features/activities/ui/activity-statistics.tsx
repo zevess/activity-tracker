@@ -1,3 +1,4 @@
+import { StatusMessage } from "@/components/ui/status-message";
 import { useGetActivityStatistics } from "@/data/queries/activities/use-get-activity-statistics";
 import { useAppTheme } from "@/theme/theme-provider";
 import { View } from "react-native";
@@ -11,6 +12,11 @@ export function ActivityStatistics({ activityId }: { activityId: number }) {
     isStatisticsLoading,
   } = useGetActivityStatistics(activityId);
   const { colors, spacing, radius } = useAppTheme();
+
+  if (isStatisticsLoading) {
+    return <StatusMessage fullScreen={false} isLoading />;
+  }
+
   return (
     <View style={{ gap: spacing.sm }}>
       <View style={{ flexDirection: "row", gap: spacing.sm }}>

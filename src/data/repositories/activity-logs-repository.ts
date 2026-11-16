@@ -36,7 +36,7 @@ export const activityLogsRepository = {
     }
   },
 
-  async markDone(activityId: number, date: Date = new Date()) {
+  async complete(activityId: number, date: Date = new Date()) {
     try {
       const dateStr = format(date, "yyyy-MM-dd");
       const existingLog = await this.getStatus(activityId, date);

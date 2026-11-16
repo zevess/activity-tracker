@@ -42,7 +42,7 @@ export function RadioButtonGroup<T extends string>({
                 alignItems: "center",
                 flexDirection: "row",
                 paddingVertical: spacing.lg,
-                paddingHorizontal: spacing.md,
+                paddingHorizontal: spacing.sm,
                 backgroundColor: colors.surface,
                 borderRadius: radius.md,
                 borderWidth: 1,

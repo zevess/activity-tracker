@@ -8,7 +8,7 @@ type StatCardProps = {
   icon: IconName;
   label: string;
   color: string;
-  value: string | number;
+  value?: string | number;
 };
 
 export function StatCard({ icon, label, color, value }: StatCardProps) {
@@ -38,7 +38,7 @@ export function StatCard({ icon, label, color, value }: StatCardProps) {
       >
         <Ionicons size={20} color={color} name={icon} />
       </View>
-      <AppText variant="body">{value}</AppText>
+      {value && <AppText variant="body">{value}</AppText>}
       <AppText variant="caption">{label}</AppText>
     </View>
   );

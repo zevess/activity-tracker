@@ -1,25 +1,25 @@
 import { AppText } from "@/components/ui/app-text";
 import { Button } from "@/components/ui/button";
+import { useCompleteActivity } from "@/data/queries/activities/use-complete-activity";
 import { useGetActivityStatus } from "@/data/queries/activities/use-get-activity-status";
-import { useMarkActivityAsCompleted } from "@/data/queries/activities/use-mark-activity";
 import { Activity } from "@/data/types/activities.types";
 import { getISODay } from "date-fns";
 import { View } from "react-native";
 import { getFormatedStatus } from "../lib/get-formated-status";
 
-type ActivityMarkButtonProps = {
+type ActivityCompleteButtonProps = {
   activity?: Activity | null;
   activityId: number;
 };
 
-export function ActivityMarkButton({
+export function ActivityCompleteButton({
   activity,
   activityId,
-}: ActivityMarkButtonProps) {
+}: ActivityCompleteButtonProps) {
   const date = new Date();
   const isoDayNumber = getISODay(date);
   const { activityStatus } = useGetActivityStatus(activityId, date);
-  const { markActivity, isActivityMarking } = useMarkActivityAsCompleted();
+  const { completeActivity, isActivityCompleting } = useCompleteActivity();
   const status = getFormatedStatus(activityStatus);
   const isScheduledToday = activity?.targetDays?.includes(isoDayNumber);
   const isCompleted = status?.value === "done" || activity?.completedAt;
@@ -35,7 +35,7 @@ export function ActivityMarkButton({
 
   function handlePress() {
     if (activity) {
-      markActivity({
+      completeActivity({
         type: activity?.type,
         activityId,
         date,
@@ -46,8 +46,8 @@ export function ActivityMarkButton({
     <View style={{ marginTop: "auto" }}>
       {shouldShowMarkButton && (
         <Button
-          disabled={isActivityMarking}
-          loading={isActivityMarking}
+          disabled={isActivityCompleting}
+          loading={isActivityCompleting}
           onPress={handlePress}
           label={"Завершить"}
         />

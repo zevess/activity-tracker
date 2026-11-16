@@ -1,4 +1,5 @@
 import { AppText } from "@/components/ui/app-text";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { Screen } from "@/components/ui/screen";
 import { useGetUserProfile } from "@/data/queries/user/use-get-user-profile";
 import { SettingsOption } from "@/features/settings/ui/settings-option";
@@ -47,6 +48,7 @@ export default function SettingsScreen() {
           label="Архив"
         />
       </View>
+      {/* <ConfirmDialog /> */}
     </Screen>
   );
 }

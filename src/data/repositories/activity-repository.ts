@@ -2,7 +2,16 @@ import { calculateCompletionRate } from "@/features/activities/lib/calculate-com
 import { calculateStreaks } from "@/features/activities/lib/calculate-streaks";
 import { getMissedDays } from "@/utils/get-missed-days";
 import { getNextHabitDueDate } from "@/utils/get-next-habit-due-date";
-import { format, isBefore, startOfMonth, subDays } from "date-fns";
+import {
+  addDays,
+  format,
+  getISODay,
+  isAfter,
+  isBefore,
+  startOfDay,
+  startOfMonth,
+  subDays,
+} from "date-fns";
 import { and, desc, eq, gte, isNotNull, isNull, lt, or } from "drizzle-orm";
 import { db } from "../db";
 import { activities, activityLogs } from "../db/schema";
@@ -125,7 +134,7 @@ export const activityRepository = {
     }
   },
 
-  async markOneOffCompleted(id: number) {
+  async completeOneOff(id: number) {
     try {
       await db
         .update(activities)
@@ -406,6 +415,105 @@ export const activityRepository = {
       bestStreak,
       completionRateMonth,
       completionRateWeek,
+    };
+  },
+
+  async getGlobalStatistics() {
+    const now = new Date();
+    const weekAgo = subDays(now, 7);
+    const weekAgoStr = format(weekAgo, "yyyy-MM-dd");
+    const todayStr = format(now, "yyyy-MM-dd");
+
+    const activeHabits = await db
+      .select()
+      .from(activities)
+      .where(
+        and(eq(activities.isArchived, false), eq(activities.type, "habit")),
+      );
+
+    const allLogs = await db
+      .select({
+        date: activityLogs.date,
+        activityId: activityLogs.activityId,
+      })
+      .from(activityLogs)
+      .where(eq(activityLogs.status, "done"));
+
+    const recentLogs = allLogs.filter((log) => log.date >= weekAgoStr);
+
+    const logsByActivity = new Map<number, string[]>();
+    allLogs.forEach((log) => {
+      const existing = logsByActivity.get(log.activityId) || [];
+      existing.push(log.date);
+      logsByActivity.set(log.activityId, existing);
+    });
+
+    let totalCompletions = allLogs.length;
+    let currentActiveStreak = 0;
+    let bestStreakOverall = 0;
+
+    let totalScheduledLastWeek = 0;
+    let totalCompletedLastWeek = recentLogs.length;
+
+    activeHabits.forEach((habit) => {
+      const targetDays = habit.targetDays
+        ? (JSON.parse(habit.targetDays) as number[])
+        : [1, 2, 3, 4, 5, 6, 7];
+      const completedDates = logsByActivity.get(habit.id) || [];
+      const completedSet = new Set(completedDates);
+
+      let currentStreak = 0;
+      let checkDate = startOfDay(now);
+      const todayIsoDay = getISODay(checkDate);
+      const isTodayScheduled = targetDays.includes(todayIsoDay);
+      const isTodayCompleted = completedSet.has(todayStr);
+
+      if (isTodayScheduled && !isTodayCompleted) {
+        currentStreak = 0;
+      } else {
+        if (isTodayCompleted) currentStreak = 1;
+        let searchDate = isTodayCompleted ? subDays(checkDate, 1) : checkDate;
+        for (let i = 0; i < 365; i++) {
+          if (isAfter(startOfDay(habit.createdAt), searchDate)) break;
+          const dateStr = format(checkDate, "yyyy-MM-dd");
+          const isoDay = getISODay(searchDate);
+
+          if (targetDays.includes(isoDay)) {
+            if (completedSet.has(dateStr)) {
+              currentStreak++;
+            } else {
+              break;
+            }
+          }
+          searchDate = subDays(searchDate, 1);
+        }
+      }
+      if (currentStreak > 0) currentActiveStreak++;
+      if (currentActiveStreak > bestStreakOverall)
+        bestStreakOverall = currentStreak;
+
+      let scheduledThisWeek = 0;
+      let cursor = startOfDay(weekAgo);
+      while (!isAfter(cursor, now)) {
+        if (targetDays.includes(getISODay(cursor))) {
+          scheduledThisWeek++;
+        }
+        cursor = addDays(cursor, 1);
+      }
+      totalScheduledLastWeek += scheduledThisWeek;
+    });
+
+    const weeklyCompletionRate =
+      totalCompletedLastWeek > 0
+        ? Math.round((totalCompletedLastWeek / totalScheduledLastWeek) * 100)
+        : 0;
+
+    return {
+      totalCompletions,
+      activeHabitsCount: activeHabits.length,
+      currentActiveStreak,
+      bestStreakOverall,
+      weeklyCompletionRate,
     };
   },
 };

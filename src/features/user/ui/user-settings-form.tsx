@@ -27,9 +27,7 @@ export function UserSettingsForm({
   }
   return (
     <>
-      <View
-        style={style}
-      >
+      <View style={style}>
         <Input
           label="Имя"
           size="lg"
@@ -38,7 +36,7 @@ export function UserSettingsForm({
           placeholder="Как к вам обращаться?"
         />
       </View>
-      <Button onPress={handlePress} label="Сохранить" />
+      <Button disabled={!name} onPress={handlePress} label="Сохранить" />
     </>
   );
 }

@@ -49,6 +49,7 @@ export const colors = {
     // Ink — для специальных элементов (можно использовать для иконок)
     ink: "#1B4D1B",
     golden: "#eab308",
+    citrus: "#f97316",
     transparent: "transparent",
   },
 
@@ -102,6 +103,7 @@ export const colors = {
     // Ink
     ink: "#7DD85F",
     golden: "#eab308",
+    citrus: "#f97316",
     transparent: "transparent",
   },
 } as const;

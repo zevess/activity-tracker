@@ -7,7 +7,7 @@ import { SectionHeader } from "@/components/ui/section-header";
 import { StatusMessage } from "@/components/ui/status-message";
 import { useGetActivityById } from "@/data/queries/activities/use-get-activity-by-id";
 import { getFormatedType } from "@/features/activities/lib/get-formated-type";
-import { ActivityMarkButton } from "@/features/activities/ui/activity-mark-button";
+import { ActivityCompleteButton } from "@/features/activities/ui/activity-complete-button";
 import { ActivityScreenDetails } from "@/features/activities/ui/activity-screen-details";
 import { ActivityStatistics } from "@/features/activities/ui/activity-statistics";
 import { useLocalSearchParams } from "expo-router";
@@ -53,7 +53,7 @@ export default function ActivityScreen() {
           <ActivityStatistics activityId={activityId} />
         </View>
       )}
-      <ActivityMarkButton activity={activity} activityId={activityId} />
+      <ActivityCompleteButton activity={activity} activityId={activityId} />
     </Screen>
   );
 }
