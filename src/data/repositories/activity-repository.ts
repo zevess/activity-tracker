@@ -1,5 +1,6 @@
 import { calculateCompletionRate } from "@/features/activities/lib/calculate-completion-rate";
 import { calculateStreaks } from "@/features/activities/lib/calculate-streaks";
+import { transformActivity } from "@/features/activities/lib/transform-activity";
 import { getMissedDays } from "@/utils/get-missed-days";
 import { getNextHabitDueDate } from "@/utils/get-next-habit-due-date";
 import {
@@ -83,7 +84,8 @@ export const activityRepository = {
           priority: data.priority ?? null,
         })
         .returning();
-      return result[0];
+      const transformed = transformActivity(result[0]);
+      return transformed;
     } catch (error) {
       console.error(error);
     }
@@ -112,7 +114,8 @@ export const activityRepository = {
         })
         .where(eq(activities.id, id))
         .returning();
-      return result[0];
+      const transformed = transformActivity(result[0]);
+      return transformed;
     } catch (error) {
       console.error(error);
     }

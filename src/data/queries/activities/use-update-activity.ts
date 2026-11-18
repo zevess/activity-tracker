@@ -1,6 +1,7 @@
 import { activityRepository } from "@/data/repositories/activity-repository";
 import { CreateActivityInput } from "@/data/types/activities.types";
 import { appToast } from "@/lib/toast/app-toast";
+import { scheduleActivityNotification } from "@/utils/schedule-notifications";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 
@@ -12,7 +13,9 @@ export function useUpdateActivity(id: number) {
       mutationKey: ["update activity"],
       mutationFn: (data: CreateActivityInput) =>
         activityRepository.update(id, data),
-      onSuccess: () => {
+      onSuccess: async (updatedActivity) => {
+        updatedActivity &&
+          (await scheduleActivityNotification(updatedActivity));
         queryClient.invalidateQueries({ queryKey: ["get activities"] });
         queryClient.invalidateQueries({ queryKey: ["get activity by id", id] });
         router.push("/activities");

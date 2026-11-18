@@ -2,6 +2,7 @@ import { activityLogsRepository } from "@/data/repositories/activity-logs-reposi
 import { activityRepository } from "@/data/repositories/activity-repository";
 import { ActivityType } from "@/data/types/activities.types";
 import { appToast } from "@/lib/toast/app-toast";
+import { cancelActivityNotifications } from "@/utils/schedule-notifications";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useRouter } from "expo-router";
@@ -29,7 +30,10 @@ export function useCompleteActivity() {
       }
       return await activityLogsRepository.complete(activityId, date);
     },
-    onSuccess: (_, { activityId, date }) => {
+    onSuccess: async (_, { activityId, date, type }) => {
+      if (type === "one_off") {
+        await cancelActivityNotifications(activityId);
+      }
       const dateStr = format(date ?? new Date(), "yyyy-MM-dd");
       queryClient.invalidateQueries({
         queryKey: ["get activity status", activityId, dateStr],
