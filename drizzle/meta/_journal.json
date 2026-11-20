@@ -71,6 +71,13 @@
       "when": 1794520097948,
       "tag": "0009_spicy_drax",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1795092872518,
+      "tag": "0010_bored_nico_minoru",
+      "breakpoints": true
     }
   ]
 }

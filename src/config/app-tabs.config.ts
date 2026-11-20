@@ -1,6 +1,6 @@
 import { IconName } from "@/components/ui/icon";
 
-export type TabName = "index" | "activities" | "stats" | "settings";
+export type TabName = "index" | "activities" | "garden" | "stats" | "settings";
 
 export type Tab = {
   name: TabName;
@@ -18,6 +18,11 @@ export const tabs: Tab[] = [
     name: "activities",
     icon: "list",
     title: "Активности",
+  },
+  {
+    name: "garden",
+    icon: "leaf",
+    title: "Сад",
   },
   {
     name: "stats",

@@ -3,7 +3,7 @@ import { useAppTheme } from "@/theme/theme-provider";
 import { getConvertedDays, getFormatedDate } from "@/utils/date";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
-import { Pressable, View } from "react-native";
+import { View } from "react-native";
 import { AppText } from "../../../components/ui/app-text";
 import { Card } from "../../../components/ui/card";
 import { CategoryChip } from "../../categories/ui/category-chip";
@@ -20,43 +20,39 @@ export function ActivityCard({ activity }: ActivityCardProps) {
   );
   const formatedDate = getFormatedDate(activity.dueDate ?? "");
   return (
-    <Pressable
+    <Card
       onPress={() =>
         router.navigate({
           pathname: "/activity/[id]",
           params: { id: activity.id },
         })
       }
-      style={({ pressed }) => [
-        {
-          opacity: pressed ? motion.opacity.pressed : 1,
-        },
-      ]}
+      style={{
+        opacity: activity.isCompletedToday ? 0.6 : 1,
+      }}
     >
-      <Card
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <AppText variant="subtitle">{activity.title}</AppText>
+        {activity.isCompletedToday && (
+          <Ionicons size={spacing.lg} name="checkmark" color={colors.success} />
+        )}
+      </View>
+      <View
         style={{
-          backgroundColor: colors.surface,
-          opacity: activity.isCompletedToday ? 0.6 : 1,
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <AppText variant="subtitle">{activity.title}</AppText>
-          {activity.isCompletedToday && (
-            <Ionicons
-              size={spacing.lg}
-              name="checkmark"
-              color={colors.success}
-            />
-          )}
-        </View>
         <View
           style={{
-            display: "flex",
             flexDirection: "row",
-            justifyContent: "space-between",
+            gap: spacing.sm,
             alignItems: "center",
           }}
         >
+          <AppText variant="body">{activity.reminderTime}</AppText>
           <View
             style={{
               flexDirection: "row",
@@ -64,45 +60,36 @@ export function ActivityCard({ activity }: ActivityCardProps) {
               alignItems: "center",
             }}
           >
-            <AppText variant="body">{activity.reminderTime}</AppText>
-            <View
-              style={{
-                flexDirection: "row",
-                gap: spacing.sm,
-                alignItems: "center",
-              }}
-            >
-              {filteredDays &&
-                filteredDays.length < 7 &&
-                filteredDays.map((day) => (
-                  <AppText tone="muted" key={day.value} variant="caption">
-                    {day.label}
-                  </AppText>
-                ))}
-              {filteredDays && filteredDays.length == 7 && (
-                <AppText tone="muted" variant="caption">
-                  Ежедневно
+            {filteredDays &&
+              filteredDays.length < 7 &&
+              filteredDays.map((day) => (
+                <AppText tone="muted" key={day.value} variant="caption">
+                  {day.label}
                 </AppText>
-              )}
-              {formatedDate && (
-                <AppText
-                  tone={activity.isOverdue ? "danger" : "default"}
-                  variant="caption"
-                >
-                  {formatedDate}
-                </AppText>
-              )}
-            </View>
+              ))}
+            {filteredDays && filteredDays.length == 7 && (
+              <AppText tone="muted" variant="caption">
+                Ежедневно
+              </AppText>
+            )}
+            {formatedDate && (
+              <AppText
+                tone={activity.isOverdue ? "danger" : "default"}
+                variant="caption"
+              >
+                {formatedDate}
+              </AppText>
+            )}
           </View>
-          {activity.category && (
-            <CategoryChip
-              name={activity.category?.name}
-              icon={activity.category?.icon}
-              color={activity.category?.color}
-            />
-          )}
         </View>
-      </Card>
-    </Pressable>
+        {activity.category && (
+          <CategoryChip
+            name={activity.category?.name}
+            icon={activity.category?.icon}
+            color={activity.category?.color}
+          />
+        )}
+      </View>
+    </Card>
   );
 }

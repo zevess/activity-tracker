@@ -22,9 +22,7 @@ export const activities = sqliteTable("activities", {
   isArchived: integer("is_archived", { mode: "boolean" })
     .notNull()
     .default(false),
-  archivedAt: integer("archived_at", { mode: "timestamp" }).default(
-    sql`(strftime('%s', 'now'))`,
-  ),
+  archivedAt: integer("archived_at", { mode: "timestamp" }),
 
   scheduleType: text("schedule_type", { enum: SCHEDULE_TYPES }),
   targetDays: text("target_days"),

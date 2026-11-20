@@ -1,12 +1,10 @@
-import { AppText } from "@/components/ui/app-text";
-import { BackButton } from "@/components/ui/back-button";
 import { Screen } from "@/components/ui/screen";
+import { ScreenTitle } from "@/components/ui/screen-title";
 import { StatusMessage } from "@/components/ui/status-message";
 import { useGetActivityById } from "@/data/queries/activities/use-get-activity-by-id";
 import { ActivityForm } from "@/features/activities/ui/activity-form";
 import { useInitialData } from "@/hooks/use-initial-data";
 import { useLocalSearchParams } from "expo-router";
-import { View } from "react-native";
 
 export default function EditActivityScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -20,16 +18,7 @@ export default function EditActivityScreen() {
 
   return (
     <Screen>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          gap: 24,
-        }}
-      >
-        <BackButton />
-        <AppText variant="title">Изменить</AppText>
-      </View>
+      <ScreenTitle variant="title" withBack title="Изменить" />
       <ActivityForm
         key={activityId}
         initialData={initialData}

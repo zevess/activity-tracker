@@ -1,8 +1,7 @@
-import { AppText } from "@/components/ui/app-text";
-import { BackButton } from "@/components/ui/back-button";
 import { Divider } from "@/components/ui/divider";
 import { EditButton } from "@/components/ui/edit-icon";
 import { Screen } from "@/components/ui/screen";
+import { ScreenTitle } from "@/components/ui/screen-title";
 import { SectionHeader } from "@/components/ui/section-header";
 import { StatusMessage } from "@/components/ui/status-message";
 import { useGetActivityById } from "@/data/queries/activities/use-get-activity-by-id";
@@ -30,21 +29,16 @@ export default function ActivityScreen() {
 
   return (
     <Screen>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
+      <ScreenTitle
+        withBack
+        title={activityType?.label ? activityType.label : ""}
       >
-        <BackButton />
-        <AppText variant="title">{activityType?.label}</AppText>
         {!activity?.completedAt ? (
           <EditButton id={activityId} />
         ) : (
           <View style={{ width: 46 }} />
         )}
-      </View>
+      </ScreenTitle>
       <ActivityScreenDetails activity={activity} />
       <Divider />
       {activity?.type === "habit" && (

@@ -1,9 +1,8 @@
-import { AppText } from "@/components/ui/app-text";
 import { Screen } from "@/components/ui/screen";
+import { ScreenTitle } from "@/components/ui/screen-title";
 import { useGetUserProfile } from "@/data/queries/user/use-get-user-profile";
 import { ActivitiesSections } from "@/features/activities/ui/activities-sections";
 import { getTimeOfDay } from "@/utils/get-time-of-day";
-import { View } from "react-native";
 
 export default function HomeScreen() {
   const { profile } = useGetUserProfile();
@@ -11,17 +10,7 @@ export default function HomeScreen() {
 
   return (
     <Screen>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        <AppText variant="hero">
-          {timeOfDay}, {profile?.name}
-        </AppText>
-      </View>
-
+      <ScreenTitle title={`${timeOfDay}, ${profile?.name}`} />
       <ActivitiesSections />
     </Screen>
   );

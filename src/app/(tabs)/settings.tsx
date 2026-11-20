@@ -1,6 +1,5 @@
-import { AppText } from "@/components/ui/app-text";
-import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { Screen } from "@/components/ui/screen";
+import { ScreenTitle } from "@/components/ui/screen-title";
 import { useGetUserProfile } from "@/data/queries/user/use-get-user-profile";
 import { SettingsOption } from "@/features/settings/ui/settings-option";
 import { UserSettingsForm } from "@/features/user/ui/user-settings-form";
@@ -14,17 +13,9 @@ export default function SettingsScreen() {
   const { profile } = useGetUserProfile();
   const { colors, radius, spacing, motion } = useAppTheme();
   const [isNameChanging, setIsNameChanging] = useState(false);
-
   return (
     <Screen>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        <AppText variant="hero">Настройки</AppText>
-      </View>
+      <ScreenTitle title="Настройки" />
       <View
         style={{
           backgroundColor: colors.surface,
@@ -48,7 +39,6 @@ export default function SettingsScreen() {
           label="Архив"
         />
       </View>
-      {/* <ConfirmDialog /> */}
     </Screen>
   );
 }

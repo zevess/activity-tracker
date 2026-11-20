@@ -1,10 +1,9 @@
-import { AppText } from "@/components/ui/app-text";
 import { IconButton } from "@/components/ui/icon-button";
 import { Screen } from "@/components/ui/screen";
+import { ScreenTitle } from "@/components/ui/screen-title";
 import { useGetActivities } from "@/data/queries/activities/use-get-activities";
 import { ActivitiesList } from "@/features/activities/ui/activities-list";
 import { Link } from "expo-router";
-import { View } from "react-native";
 
 export default function ActivitiesScreen() {
   const {
@@ -16,17 +15,11 @@ export default function ActivitiesScreen() {
 
   return (
     <Screen>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        <AppText variant="hero">Активности</AppText>
+      <ScreenTitle title="Активности">
         <Link href={"/activity/new"} asChild>
           <IconButton name="add" variant="primary" />
         </Link>
-      </View>
+      </ScreenTitle>
 
       {isActivitiesLoaded && (
         <ActivitiesList

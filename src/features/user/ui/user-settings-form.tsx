@@ -10,7 +10,7 @@ type UserSettingsFormProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-export function UserSettingsForm({
+export async function UserSettingsForm({
   onSuccess,
   userName,
   style,

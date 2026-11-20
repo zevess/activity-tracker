@@ -11,7 +11,7 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (isProfileLoading) return;
     if (isProfileLoaded && (!profile || profile.name === "Пользователь")) {
-      router.replace("/user");
+      router.replace("/welcome");
     }
   }, [profile, isProfileLoaded, isProfileLoading, router]);
   if (isProfileLoading) {
